@@ -1,4 +1,5 @@
-""" Write a compare function that returns
+"""
+Write a compare function that returns
  1 if x >  y
  0 if x == y
 -1 if x <  y

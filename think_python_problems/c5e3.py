@@ -1,4 +1,5 @@
-""" Fermat’s Last Theorem says that there are no positive integers a, b, and c such that
+"""
+Fermat’s Last Theorem says that there are no positive integers a, b, and c such that
 a ** n + b ** n = c ** n
 for any values of n greater than 2.
 1. Write a function named check_fermat that takes four parameters (a, b, c, n)

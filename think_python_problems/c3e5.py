@@ -1,4 +1,5 @@
-""" 1. Write a function that draws a grid like the following:
+"""
+1. Write a function that draws a grid like the following:
 + - - - - + - - - - +
 |         |         |
 |         |         |
