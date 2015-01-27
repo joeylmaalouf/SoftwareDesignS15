@@ -1,22 +1,15 @@
-# -*- coding: utf-8 -*-
 """
-Created on Sun Feb  2 11:24:42 2014
-
-@author: YOUR NAME HERE
-
+Joey L. Maalouf
 """
-
-# you may find it useful to import these variables (although you are not required to use them)
 from amino_acids import aa, codons, aa_table
 import random
 from load import load_seq
+
 
 def shuffle_string(s):
     """ Shuffles the characters in the input string
         NOTE: this is a helper function, you do not have to modify this in any way """
     return ''.join(random.sample(s,len(s)))
-
-### YOU WILL START YOUR IMPLEMENTATION FROM HERE DOWN ###
 
 
 def get_complement(nucleotide):
@@ -29,8 +22,8 @@ def get_complement(nucleotide):
     >>> get_complement('C')
     'G'
     """
-    # TODO: implement this
-    pass
+    return { "A": "T", "C": "G", "G": "C", "T": "A" }[nucleotide]
+
 
 def get_reverse_complement(dna):
     """ Computes the reverse complementary sequence of DNA for the specfied DNA
@@ -43,8 +36,11 @@ def get_reverse_complement(dna):
     >>> get_reverse_complement("CCGCGTTCA")
     'TGAACGCGG'
     """
-    # TODO: implement this
-    pass
+    s = ""
+    for n in dna:
+    	s += get_complement(n)
+    return s[::-1]
+
 
 def rest_of_ORF(dna):
     """ Takes a DNA sequence that is assumed to begin with a start codon and returns
@@ -58,8 +54,12 @@ def rest_of_ORF(dna):
     >>> rest_of_ORF("ATGAGATAGG")
     'ATGAGA'
     """
-    # TODO: implement this
-    pass
+    stop_codons = ["TAA", "TAG", "TGA"]
+    for s in stop_codons:
+    	if s in dna[3:]:
+    		dna = dna.split(s)[0]
+    return dna
+
 
 def find_all_ORFs_oneframe(dna):
     """ Finds all non-nested open reading frames in the given DNA sequence and returns
@@ -76,6 +76,7 @@ def find_all_ORFs_oneframe(dna):
     # TODO: implement this
     pass
 
+
 def find_all_ORFs(dna):
     """ Finds all non-nested open reading frames in the given DNA sequence in all 3
         possible frames and returns them as a list.  By non-nested we mean that if an
@@ -90,6 +91,7 @@ def find_all_ORFs(dna):
     """
     # TODO: implement this
     pass
+
 
 def find_all_ORFs_both_strands(dna):
     """ Finds all non-nested open reading frames in the given DNA sequence on both
@@ -124,6 +126,7 @@ def longest_ORF_noncoding(dna, num_trials):
     # TODO: implement this
     pass
 
+
 def coding_strand_to_AA(dna):
     """ Computes the Protein encoded by a sequence of DNA.  This function
         does not check for start and stop codons (it assumes that the input
@@ -141,6 +144,7 @@ def coding_strand_to_AA(dna):
     # TODO: implement this
     pass
 
+
 def gene_finder(dna, threshold):
     """ Returns the amino acid sequences coded by all genes that have an ORF
         larger than the specified threshold.
@@ -153,6 +157,7 @@ def gene_finder(dna, threshold):
     """
     # TODO: implement this
     pass
+
 
 if __name__ == "__main__":
     import doctest
