@@ -26,21 +26,21 @@ import sys
 
 
 def draw_grid(size):
-    hb = "+" + (size * " - - - - +")
-    print(hb)
-    for i in range(size):
-        vb = "|" + (size * "         |")
-        for j in range(4):
-            print(vb)
-        print(hb)
+	hb = "+" + (size * " - - - - +")
+	print(hb)
+	for i in range(size):
+		vb = "|" + (size * "         |")
+		for j in range(4):
+			print(vb)
+		print(hb)
 
 
 def main(argv):
-    draw_grid(2)
-    draw_grid(3)
-    draw_grid(4)
-    draw_grid(10)
+	draw_grid(2)
+	draw_grid(3)
+	draw_grid(4)
+	draw_grid(10)
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+	main(sys.argv)
