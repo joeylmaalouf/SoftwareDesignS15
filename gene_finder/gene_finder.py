@@ -53,8 +53,7 @@ def rest_of_ORF(dna):
 	>>> rest_of_ORF("ATGAGATAGG")
 	'ATGAGA'
 	"""
-	stop_codons = ["TAA", "TAG", "TGA"]
-	for s in stop_codons:
+	for s in ["TAA", "TAG", "TGA"]:
 		for c in range(len(dna[:-2])):
 			if c%3 == 0 and dna[c:c+3] in s:
 				dna = dna[:c]
@@ -73,8 +72,7 @@ def find_all_ORFs_oneframe(dna):
 	>>> find_all_ORFs_oneframe("ATGCATGAATGTAGATAGATGTGCCC")
 	['ATGCATGAATGTAGA', 'ATGTGCCC']
 	"""
-	starts = [c for c in range(len(dna[:-2])) if (c%3 == 0 and dna[c:c+3] == "ATG")]
-	return [rest_of_ORF(dna[s:]) for s in starts]
+	return [rest_of_ORF(dna[c:]) for c in range(0, len(dna[:-2]), 3) if dna[c:c+3] == "ATG"]
 
 
 def find_all_ORFs(dna):
@@ -89,8 +87,7 @@ def find_all_ORFs(dna):
 	>>> find_all_ORFs("ATGCATGAATGTAG")
 	['ATGCATGAATGTAG', 'ATGAATGTAG', 'ATG']
 	"""
-	# TODO: implement this
-	pass
+	return [rest_of_ORF(dna[c:]) for c in range(len(dna[:-2])) if dna[c:c+3] == "ATG"]
 
 
 def find_all_ORFs_both_strands(dna):
@@ -102,7 +99,9 @@ def find_all_ORFs_both_strands(dna):
 	>>> find_all_ORFs_both_strands("ATGCGAATGTAGCATCAAA")
 	['ATGCGAATG', 'ATGCTACATTCGCAT']
 	"""
-	# TODO: implement this
+	# l = find_all_ORFs(dna)
+	# l.extend(find_all_ORFs(get_reverse_complement(dna)))
+	# return l
 	pass
 
 
