@@ -10,7 +10,8 @@ import random
 
 def shuffle_string(s):
 	""" Shuffles the characters in the input string
-		NOTE: this is a helper function, you do not have to modify this in any way """
+		NOTE: this is a helper function, you do not have to modify this in any way
+	"""
 	return "".join(random.sample(s, len(s)))
 
 
@@ -53,10 +54,9 @@ def rest_of_ORF(dna):
 	>>> rest_of_ORF("ATGAGATAGG")
 	'ATGAGA'
 	"""
-	for s in ["TAA", "TAG", "TGA"]:
-		for c in range(len(dna[:-2])):
-			if c%3 == 0 and dna[c:c+3] in s:
-				dna = dna[:c]
+	for c in range(0, len(dna[:-2]), 3):
+		if dna[c:c+3] in ["TAA", "TAG", "TGA"]:
+			dna = dna[:c]
 	return dna
 
 
@@ -72,7 +72,15 @@ def find_all_ORFs_oneframe(dna):
 	>>> find_all_ORFs_oneframe("ATGCATGAATGTAGATAGATGTGCCC")
 	['ATGCATGAATGTAGA', 'ATGTGCCC']
 	"""
-	return [rest_of_ORF(dna[c:]) for c in range(0, len(dna[:-2]), 3) if dna[c:c+3] == "ATG"]
+	out = []
+	inframe = False
+	for i in range(0, len(dna), 3):
+		if dna[i:i+3] == "ATG" and inframe == False:
+			inframe = True
+			out.append(rest_of_ORF(dna[i:]))
+		elif dna[i:i+3] in ["TAA", "TAG", "TGA"]:
+			inframe = False
+	return out
 
 
 def find_all_ORFs(dna):
@@ -87,7 +95,10 @@ def find_all_ORFs(dna):
 	>>> find_all_ORFs("ATGCATGAATGTAG")
 	['ATGCATGAATGTAG', 'ATGAATGTAG', 'ATG']
 	"""
-	return [rest_of_ORF(dna[c:]) for c in range(len(dna[:-2])) if dna[c:c+3] == "ATG"]
+	l = []
+	for frame in range(3):
+		l.extend(find_all_ORFs_oneframe(dna[frame:]))
+	return l
 
 
 def find_all_ORFs_both_strands(dna):
@@ -99,10 +110,7 @@ def find_all_ORFs_both_strands(dna):
 	>>> find_all_ORFs_both_strands("ATGCGAATGTAGCATCAAA")
 	['ATGCGAATG', 'ATGCTACATTCGCAT']
 	"""
-	# l = find_all_ORFs(dna)
-	# l.extend(find_all_ORFs(get_reverse_complement(dna)))
-	# return l
-	pass
+	return find_all_ORFs(dna)+find_all_ORFs(get_reverse_complement(dna))
 
 
 def longest_ORF(dna):
@@ -111,8 +119,7 @@ def longest_ORF(dna):
 	>>> longest_ORF("ATGCGAATGTAGCATCAAA")
 	'ATGCTACATTCGCAT'
 	"""
-	# TODO: implement this
-	pass
+	return max(find_all_ORFs_both_strands(dna), key=len)
 
 
 def longest_ORF_noncoding(dna, num_trials):
@@ -121,9 +128,20 @@ def longest_ORF_noncoding(dna, num_trials):
 		
 		dna: a DNA sequence
 		num_trials: the number of random shuffles
-		returns: the maximum length longest ORF """
-	# TODO: implement this
-	pass
+		returns: the maximum length longest ORF
+	
+	I added these unit tests because none existed for this function,
+	and they test different values for both dna and num_trials.
+	>>> longest_ORF_noncoding("ATGCGAATGTAGCATCAAA", 400)
+	15
+	>>> longest_ORF_noncoding("ATGCATGAATGTAG", 200)
+	14
+	"""
+	length = len(longest_ORF(dna))
+	for i in range(num_trials):
+		shuffle_string(dna)
+		length = max(length, len(longest_ORF(dna)))
+	return length
 
 
 def coding_strand_to_AA(dna):
@@ -140,8 +158,7 @@ def coding_strand_to_AA(dna):
 		>>> coding_strand_to_AA("ATGCCCGCTTT")
 		'MPA'
 	"""
-	# TODO: implement this
-	pass
+	return "".join(aa_table[dna[c:c+3]] for c in range(0, len(dna[:-2]), 3))
 
 
 def gene_finder(dna, threshold):
@@ -153,11 +170,19 @@ def gene_finder(dna, threshold):
 				   gene.
 		returns: a list of all amino acid sequences whose ORFs meet the minimum
 				 length specified.
+
+		I added these unit tests because none existed for this function,
+		and they test different values for both dna and threshold.
+		>>> gene_finder("ATGCCCGCTTT", 11)
+		['MPA']
+		>>> gene_finder("ATGCGAATGTAGCATCAAA", 15)
+		['MLHSH']
 	"""
-	# TODO: implement this
-	pass
+	return [coding_strand_to_AA(i) for i in find_all_ORFs_both_strands(dna) if len(i) >= threshold]
 
 
 if __name__ == "__main__":
 	import doctest
 	doctest.testmod()
+	dna = load_seq("./data/X73525.fa")
+	print(gene_finder(dna, longest_ORF_noncoding(dna, 1500)))
