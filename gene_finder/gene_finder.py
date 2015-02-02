@@ -54,7 +54,7 @@ def rest_of_ORF(dna):
 	>>> rest_of_ORF("ATGAGATAGG")
 	'ATGAGA'
 	"""
-	for c in range(0, len(dna[:-2]), 3):
+	for c in range(0, len(dna)-2, 3):
 		if dna[c:c+3] in ["TAA", "TAG", "TGA"]:
 			dna = dna[:c]
 	return dna
@@ -157,7 +157,7 @@ def coding_strand_to_AA(dna):
 		>>> coding_strand_to_AA("ATGCCCGCTTT")
 		'MPA'
 	"""
-	return "".join(aa_table[dna[c:c+3]] for c in range(0, len(dna[:-2]), 3))
+	return "".join(aa_table[dna[c:c+3]] for c in range(0, len(dna)-2, 3))
 
 
 def gene_finder(dna):
