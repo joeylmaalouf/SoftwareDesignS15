@@ -16,7 +16,7 @@ def load_seq(fasta_file):
     retval = ""
     f = open(fasta_file)
     lines = f.readlines()
-    for l in lines[2:]:
+    for l in lines[1:]:
         retval += l[0:-1]
     f.close()
     return retval

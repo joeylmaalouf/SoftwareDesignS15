@@ -72,15 +72,14 @@ def find_all_ORFs_oneframe(dna):
 	>>> find_all_ORFs_oneframe("ATGCATGAATGTAGATAGATGTGCCC")
 	['ATGCATGAATGTAGA', 'ATGTGCCC']
 	"""
-	out = []
-	inframe = False
-	for i in range(0, len(dna), 3):
-		if dna[i:i+3] == "ATG" and inframe == False:
-			inframe = True
-			out.append(rest_of_ORF(dna[i:]))
-		elif dna[i:i+3] in ["TAA", "TAG", "TGA"]:
-			inframe = False
-	return out
+	i, l = 0, []
+	while i < len(dna)-2:
+		if dna[i:i+3] == "ATG":
+			l.append(rest_of_ORF(dna[i:]))
+			i += len(l[-1])
+		else:
+			i += 3
+	return l
 
 
 def find_all_ORFs(dna):
@@ -161,28 +160,24 @@ def coding_strand_to_AA(dna):
 	return "".join(aa_table[dna[c:c+3]] for c in range(0, len(dna[:-2]), 3))
 
 
-def gene_finder(dna, threshold):
-	""" Returns the amino acid sequences coded by all genes that have an ORF
-		larger than the specified threshold.
+def gene_finder(dna):
+	""" Returns the amino acid sequences that are likely coded by the specified dna.
 		
 		dna: a DNA sequence
-		threshold: the minimum length of the ORF for it to be considered a valid
-				   gene.
-		returns: a list of all amino acid sequences whose ORFs meet the minimum
-				 length specified.
+		returns: a list of all amino acid sequences coded by the sequence dna.
 
 		I added these unit tests because none existed for this function,
-		and they test different values for both dna and threshold.
-		>>> gene_finder("ATGCCCGCTTT", 11)
+		and they test different values.
+		>>> gene_finder("ATGCCCGCTTT")
 		['MPA']
-		>>> gene_finder("ATGCGAATGTAGCATCAAA", 15)
+		>>> gene_finder("ATGCGAATGTAGCATCAAA")
 		['MLHSH']
 	"""
+	threshold = longest_ORF_noncoding(dna, 1500)
 	return [coding_strand_to_AA(i) for i in find_all_ORFs_both_strands(dna) if len(i) >= threshold]
 
 
 if __name__ == "__main__":
 	import doctest
 	doctest.testmod()
-	dna = load_seq("./data/X73525.fa")
-	print(gene_finder(dna, longest_ORF_noncoding(dna, 1500)))
+	print(gene_finder(load_seq("./data/X73525.fa")))
