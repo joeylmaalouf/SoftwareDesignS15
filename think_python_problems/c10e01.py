@@ -7,8 +7,8 @@ from all of the nested lists.
 import sys
 
 
-def nested_sum(lst):
-	return sum(item for sublist in lst for item in sublist)
+def nested_sum(l):
+	return sum(sum(s) for s in l)
 
 
 def main(argv):
