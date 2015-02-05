@@ -1,1 +1,2 @@
 This appears to be type III secretion system protein SpaS (Salmonella enterica).
+It is used to inject proteins into the host cell.
