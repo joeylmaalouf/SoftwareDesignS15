@@ -5,7 +5,7 @@ Franklin W. Olin College of Engineering
 """
 from math import cos, pi, sin
 from PIL import Image
-import random
+from random import randint
 
 
 def build_random_function(min_depth, max_depth):
@@ -19,17 +19,22 @@ def build_random_function(min_depth, max_depth):
 				 (see assignment writeup for details on the representation of
 				 these functions)
 	"""
-	return rand_func_helper(0, random.randint(min_depth, max_depth))
+	return rand_func_helper(lambda x,y: x, 0, randint(min_depth, max_depth))
 
 
-def rand_func_helper(current_depth, desired_depth):
+def rand_func_helper(func, current_depth, desired_depth):
 	""" The recursive helper function for the wrapper function above.
 
+		func: the currently composed function
 		current_depth: how many layers we've gone through
 		desired_depth: how many we'll actually go through
 	"""
-	# TODO: implement this with lambda functions
-	pass
+	# TODO: actually make use of the func variable and nest the functions
+	# TODO: make some more variety in the functions
+	if current_depth == desired_depth:
+		return func
+	functions = [lambda x,y: sin(pi*x)+cos(pi*y), lambda x,y: sin(pi*x)-cos(pi*y), lambda x,y: -sin(pi*x)+cos(pi*y), lambda x,y: -sin(pi*x)-cos(pi*y)]
+	return rand_func_helper(functions[randint(0, 3)], current_depth+1, desired_depth)
 
 
 #def evaluate_random_function(f, x, y):
@@ -108,9 +113,9 @@ def test_image(filename, x_size=350, y_size=350):
 		for j in range(y_size):
 			x = remap_interval(i, 0, x_size, -1, 1)
 			y = remap_interval(j, 0, y_size, -1, 1)
-			pixels[i, j] = (random.randint(0, 255),  # R
-							random.randint(0, 255),  # G
-							random.randint(0, 255))  # B
+			pixels[i, j] = (randint(0, 255),  # R
+							randint(0, 255),  # G
+							randint(0, 255))  # B
 	im.save(filename)
 
 
@@ -141,4 +146,4 @@ def generate_art(filename, x_size=350, y_size=350):
 if __name__ == '__main__':
 	import doctest
 	doctest.testmod()
-	generate_art("myart.png",)
+	generate_art("myart.png")
