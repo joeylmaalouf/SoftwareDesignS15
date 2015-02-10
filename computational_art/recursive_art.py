@@ -3,6 +3,7 @@ Joey L. Maalouf
 Software Design, Spring 2015
 Franklin W. Olin College of Engineering
 """
+from math import cos, pi, sin
 from PIL import Image
 import random
 
@@ -18,25 +19,34 @@ def build_random_function(min_depth, max_depth):
 				 (see assignment writeup for details on the representation of
 				 these functions)
 	"""
-	# TODO: implement this
+	return rand_func_helper(0, random.randint(min_depth, max_depth))
+
+
+def rand_func_helper(current_depth, desired_depth):
+	""" The recursive helper function for the wrapper function above.
+
+		current_depth: how many layers we've gone through
+		desired_depth: how many we'll actually go through
+	"""
+	# TODO: implement this with lambda functions
 	pass
 
 
-def evaluate_random_function(f, x, y):
-	""" Evaluate the random function f with inputs x,y
-		Representation of the function f is defined in the assignment writeup
-
-		f: the function to evaluate
-		x: the value of x to be used to evaluate the function
-		y: the value of y to be used to evaluate the function
-		returns: the function value
-
-		>>> evaluate_random_function(["x"],-0.5, 0.75)
-		-0.5
-		>>> evaluate_random_function(["y"],0.1,0.02)
-		0.02
-	"""
-	return {"x":x, "y":y}[f[0]]
+#def evaluate_random_function(f, x, y):
+#	""" Evaluate the random function f with inputs x,y
+#		Representation of the function f is defined in the assignment writeup
+#
+#		f: the function to evaluate
+#		x: the value of x to be used to evaluate the function
+#		y: the value of y to be used to evaluate the function
+#		returns: the function value
+#
+#		>>> evaluate_random_function(["x"],-0.5, 0.75)
+#		-0.5
+#		>>> evaluate_random_function(["y"],0.1,0.02)
+#		0.02
+#	"""
+#	return {"x":x, "y":y}[f[0]]
 
 
 def remap_interval(val, iis, iie, ois, oie):
@@ -92,17 +102,15 @@ def test_image(filename, x_size=350, y_size=350):
 		filename: string filename for image (should be .png)
 		x_size, y_size: optional args to set image dimensions (default: 350)
 	"""
-	# Create image and loop over all pixels
 	im = Image.new("RGB", (x_size, y_size))
 	pixels = im.load()
 	for i in range(x_size):
 		for j in range(y_size):
 			x = remap_interval(i, 0, x_size, -1, 1)
 			y = remap_interval(j, 0, y_size, -1, 1)
-			pixels[i, j] = (random.randint(0, 255),  # Red channel
-							random.randint(0, 255),  # Green channel
-							random.randint(0, 255))  # Blue channel
-
+			pixels[i, j] = (random.randint(0, 255),  # R
+							random.randint(0, 255),  # G
+							random.randint(0, 255))  # B
 	im.save(filename)
 
 
@@ -112,12 +120,10 @@ def generate_art(filename, x_size=350, y_size=350):
 		filename: string filename for image (should be .png)
 		x_size, y_size: optional args to set image dimensions (default: 350)
 	"""
-	# Functions for red, green, and blue channels - where the magic happens!
-	red_function = ["x"]
-	green_function = ["y"]
-	blue_function = ["x"]
+	red_function = build_random_function(7, 9)
+	green_function = build_random_function(7, 9)
+	blue_function = build_random_function(7, 9)
 
-	# Create image and loop over all pixels
 	im = Image.new("RGB", (x_size, y_size))
 	pixels = im.load()
 	for i in range(x_size):
@@ -125,10 +131,9 @@ def generate_art(filename, x_size=350, y_size=350):
 			x = remap_interval(i, 0, x_size, -1, 1)
 			y = remap_interval(j, 0, y_size, -1, 1)
 			pixels[i, j] = (
-					color_map(evaluate_random_function(red_function, x, y)),
-					color_map(evaluate_random_function(green_function, x, y)),
-					color_map(evaluate_random_function(blue_function, x, y))
-					)
+					color_map(red_function(x, y)),
+					color_map(green_function(x, y)),
+					color_map(blue_function(x, y)))
 
 	im.save(filename)
 
@@ -136,4 +141,4 @@ def generate_art(filename, x_size=350, y_size=350):
 if __name__ == '__main__':
 	import doctest
 	doctest.testmod()
-	generate_art("myart.png")
+	generate_art("myart.png",)
