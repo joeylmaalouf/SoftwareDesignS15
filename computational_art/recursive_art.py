@@ -15,26 +15,30 @@ def build_random_function(min_depth, max_depth):
 
 		min_depth: the minimum depth of the random function
 		max_depth: the maximum depth of the random function
-		returns: the randomly generated function represented as a nested list
-				 (see assignment writeup for details on the representation of
-				 these functions)
+		returns: the randomly generated function
 	"""
-	return rand_func_helper(lambda x,y: x, 0, randint(min_depth, max_depth))
+	return rand_func_helper(None, randint(min_depth, max_depth))
 
 
-def rand_func_helper(func, current_depth, desired_depth):
+def rand_func_helper(func, depth):
 	""" The recursive helper function for the wrapper function above.
 
 		func: the currently composed function
-		current_depth: how many layers we've gone through
-		desired_depth: how many we'll actually go through
+		depth: how many layers we have left
 	"""
 	# TODO: actually make use of the func variable and nest the functions
-	# TODO: make some more variety in the functions
-	if current_depth == desired_depth:
+	if depth == 0:
 		return func
-	functions = [lambda x,y: sin(pi*x)+cos(pi*y), lambda x,y: sin(pi*x)-cos(pi*y), lambda x,y: -sin(pi*x)+cos(pi*y), lambda x,y: -sin(pi*x)-cos(pi*y)]
-	return rand_func_helper(functions[randint(0, 3)], current_depth+1, desired_depth)
+	def f0(x,y):
+		return sin(pi*x)+cos(pi*y)
+	def f1(x,y):
+		return sin(pi*x)-cos(pi*y)
+	def f2(x,y):
+		return -sin(pi*x)+cos(pi*y)
+	def f3(x,y):
+		return -sin(pi*x)-cos(pi*y)
+	functions = [f0, f1, f2, f3]
+	return rand_func_helper(functions[randint(0, 3)], depth-1)
 
 
 #def evaluate_random_function(f, x, y):
@@ -146,4 +150,4 @@ def generate_art(filename, x_size=350, y_size=350):
 if __name__ == '__main__':
 	import doctest
 	doctest.testmod()
-	generate_art("myart.png")
+	generate_art("computer_generated_art.png")
