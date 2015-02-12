@@ -17,45 +17,49 @@ def build_random_function(min_depth, max_depth):
 		max_depth: the maximum depth of the random function
 		returns: the randomly generated function
 	"""
-	return rand_func_helper(None, randint(min_depth, max_depth))
+	return recursive_helper(None, randint(min_depth, max_depth))
 
 
-def rand_func_helper(func, depth):
-	""" The recursive helper function for the wrapper function above.
-
-		func: the currently composed function
-		depth: how many layers we have left
-	"""
-	# TODO: actually make use of the func variable and nest the functions
+def recursive_helper(fn, depth):
 	if depth == 0:
-		return func
-	def f0(x,y):
-		return sin(pi*x)+cos(pi*y)
-	def f1(x,y):
-		return sin(pi*x)-cos(pi*y)
-	def f2(x,y):
-		return -sin(pi*x)+cos(pi*y)
-	def f3(x,y):
-		return -sin(pi*x)-cos(pi*y)
-	functions = [f0, f1, f2, f3]
-	return rand_func_helper(functions[randint(0, 3)], depth-1)
+		return ["x", "y"][randint(0, 1)]
+	fns = ["prod", "avg", "sin_pi", "cos_pi"]
+	newfunc = fns[randint(0, 3)]
+	if newfunc is "prod" or newfunc is "avg":
+		return [newfunc, recursive_helper(fn, depth-1), recursive_helper(fn, depth-1)]
+	return [newfunc, recursive_helper(fn, depth-1)]
 
 
-#def evaluate_random_function(f, x, y):
-#	""" Evaluate the random function f with inputs x,y
-#		Representation of the function f is defined in the assignment writeup
-#
-#		f: the function to evaluate
-#		x: the value of x to be used to evaluate the function
-#		y: the value of y to be used to evaluate the function
-#		returns: the function value
-#
-#		>>> evaluate_random_function(["x"],-0.5, 0.75)
-#		-0.5
-#		>>> evaluate_random_function(["y"],0.1,0.02)
-#		0.02
-#	"""
-#	return {"x":x, "y":y}[f[0]]
+def evaluate_random_function(f, x, y):
+	""" Evaluate the random function f with inputs x,y
+		Representation of the function f is defined in the assignment writeup
+
+		f: the function to evaluate
+		x: the value of x to be used to evaluate the function
+		y: the value of y to be used to evaluate the function
+		returns: the function value
+
+		>>> evaluate_random_function(["x"],-0.5, 0.75)
+		-0.5
+		>>> evaluate_random_function(["y"],0.1,0.02)
+		0.02
+		>>> evaluate_random_function(["sin_pi", ["x"]],1.5,0)
+		-1.0
+		>>> evaluate_random_function(["prod", ["cos_pi", ["x"]], ["sin_pi", ["y"]]], 0, 0)
+		0.0
+	"""
+	if f[0] is "x":
+		return x
+	elif f[0] is "y":
+		return y
+	elif f[0] is "prod":
+		return evaluate_random_function(f[1], x, y)*evaluate_random_function(f[2], x, y)
+	elif f[0] is "avg":
+		return 0.5*(evaluate_random_function(f[1], x, y)+evaluate_random_function(f[2], x, y))
+	elif f[0] is "sin_pi":
+		return sin(pi*evaluate_random_function(f[1], x, y))
+	elif f[0] is "cos_pi":
+		return cos(pi*evaluate_random_function(f[1], x, y))
 
 
 def remap_interval(val, iis, iie, ois, oie):
@@ -139,10 +143,11 @@ def generate_art(filename, x_size=350, y_size=350):
 		for j in range(y_size):
 			x = remap_interval(i, 0, x_size, -1, 1)
 			y = remap_interval(j, 0, y_size, -1, 1)
-			pixels[i, j] = (
-					color_map(red_function(x, y)),
-					color_map(green_function(x, y)),
-					color_map(blue_function(x, y)))
+			pixels[i, j] = ( 
+				color_map(evaluate_random_function(red_function, x, y)), 
+				color_map(evaluate_random_function(green_function, x, y)), 
+				color_map(evaluate_random_function(blue_function, x, y)) 
+				)
 
 	im.save(filename)
 
