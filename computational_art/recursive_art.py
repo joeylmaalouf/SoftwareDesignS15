@@ -23,48 +23,49 @@ def build_random_function(min_depth, max_depth):
 
 def recursive_helper(depth):
 	if depth == 0:
-		return ["x", "y"][randint(0, 1)]
+		return ["x", "y", "z"][randint(0, 2)]
 	fns = ["prod", "avg", "sin_pi", "cos_pi", "abs", "square"]
 	newfunc = fns[randint(0, 5)]
 	if newfunc is "prod" or newfunc is "avg":
-		return [newfunc, recursive_helper(depth-1), recursive_helper(depth-1)]
+		return [newfunc, recursive_helper(depth-1), recursive_helper(depth-1), recursive_helper(depth-1)]
 	return [newfunc, recursive_helper(depth-1)]
 
 
-def evaluate_random_function(f, x, y):
-	""" Evaluate the random function f with inputs x,y
+def evaluate_random_function(f, x, y, z):
+	""" Evaluate the random function f with inputs x,y,z
 		Representation of the function f is defined in the assignment writeup
 
 		f: the function to evaluate
 		x: the value of x to be used to evaluate the function
 		y: the value of y to be used to evaluate the function
+		z: the value of z to be used to evaluate the function
 		returns: the function value
 
-		>>> evaluate_random_function(["x"],-0.5, 0.75)
+		>>> evaluate_random_function(["x"], -0.5, 0.75, 0)
 		-0.5
-		>>> evaluate_random_function(["y"],0.1,0.02)
+		>>> evaluate_random_function(["y"], 0.1, 0.02, 0)
 		0.02
-		>>> evaluate_random_function(["sin_pi", ["x"]],1.5,0)
+		>>> evaluate_random_function(["sin_pi", ["x"]], 1.5, 0, 0)
 		-1.0
-		>>> evaluate_random_function(["prod", ["cos_pi", ["x"]], ["sin_pi", ["y"]]], 0, 0)
-		0.0
 	"""
 	if f[0] is "x":
 		return x
 	elif f[0] is "y":
 		return y
+	elif f[0] is "z":
+		return z
 	elif f[0] is "prod":
-		return evaluate_random_function(f[1], x, y)*evaluate_random_function(f[2], x, y)
+		return evaluate_random_function(f[1], x, y, z)*evaluate_random_function(f[2], x, y, z)*evaluate_random_function(f[3], x, y, z)
 	elif f[0] is "avg":
-		return 0.5*(evaluate_random_function(f[1], x, y)+evaluate_random_function(f[2], x, y))
+		return float(evaluate_random_function(f[1], x, y, z)+evaluate_random_function(f[2], x, y, z)+evaluate_random_function(f[3], x, y, z))/3
 	elif f[0] is "sin_pi":
-		return sin(pi*evaluate_random_function(f[1], x, y))
+		return sin(pi*evaluate_random_function(f[1], x, y, z))
 	elif f[0] is "cos_pi":
-		return cos(pi*evaluate_random_function(f[1], x, y))
+		return cos(pi*evaluate_random_function(f[1], x, y, z))
 	elif f[0] is "abs":
-		return abs(evaluate_random_function(f[1], x, y))
+		return abs(evaluate_random_function(f[1], x, y, z))
 	elif f[0] is "square":
-		return evaluate_random_function(f[1], x, y)**2
+		return evaluate_random_function(f[1], x, y, z)**2
 
 
 def remap_interval(val, iis, iie, ois, oie):
@@ -130,37 +131,45 @@ def test_image(filename, x_size=350, y_size=350):
 							randint(0, 255),  # G
 							randint(0, 255))  # B
 	im.save(filename)
+	return im
 
 
-def generate_art(filename, x_size=350, y_size=350):
+def generate_art(filename, x_size=350, y_size=350, frame_count=120):
 	""" Generate computational art and save as an image file.
 
 		filename: string filename for image (should be .png)
 		x_size, y_size: optional args to set image dimensions (default: 350)
+		frame_count: optional arg to set movie length
 	"""
-	red_function = build_random_function(7, 9)
-	green_function = build_random_function(7, 9)
-	blue_function = build_random_function(7, 9)
+	red_function = build_random_function(8, 10)
+	green_function = build_random_function(8, 10)
+	blue_function = build_random_function(8, 10)
 
 	im = Image.new("RGB", (x_size, y_size))
 	pixels = im.load()
-	for i in range(x_size):
-		for j in range(y_size):
-			x = remap_interval(i, 0, x_size, -1, 1)
-			y = remap_interval(j, 0, y_size, -1, 1)
-			pixels[i, j] = ( 
-				color_map(evaluate_random_function(red_function, x, y)), 
-				color_map(evaluate_random_function(green_function, x, y)), 
-				color_map(evaluate_random_function(blue_function, x, y)) 
-				)
 
-	im.save(filename)
+	for t in range(frame_count):
+		z = remap_interval(t, 0, frame_count, -1, 1)
+
+		for i in range(x_size):
+			x = remap_interval(i, 0, x_size, -1, 1)
+
+			for j in range(y_size):
+				y = remap_interval(j, 0, y_size, -1, 1)
+
+				pixels[i, j] = (
+					color_map(evaluate_random_function(red_function, x, y, z)),
+					color_map(evaluate_random_function(green_function, x, y, z)),
+					color_map(evaluate_random_function(blue_function, x, y, z))
+					)
+
+		im.save(filename+"_"+"{0:03d}".format(t)+".png")
+
 	return im
 
 
 if __name__ == '__main__':
 	import doctest
 	doctest.testmod()
-	for i in range(120):
-		generate_art("./movie_frames/computer_generated_art_"+str(i)+".png")
-	movie("./movie_frames/computer_generated_art_*.png", fps=30, output_file="./movie.gif")
+	generate_art("./movie_frames/computer_generated_art")
+	movie("./movie_frames/computer_generated_art_*.png", fps = 30, output_file = "./movie.gif")
