@@ -23,8 +23,8 @@ def build_random_function(min_depth, max_depth):
 def recursive_helper(fn, depth):
 	if depth == 0:
 		return ["x", "y"][randint(0, 1)]
-	fns = ["prod", "avg", "sin_pi", "cos_pi"]
-	newfunc = fns[randint(0, 3)]
+	fns = ["prod", "avg", "sin_pi", "cos_pi", "abs", "square"]
+	newfunc = fns[randint(0, 5)]
 	if newfunc is "prod" or newfunc is "avg":
 		return [newfunc, recursive_helper(fn, depth-1), recursive_helper(fn, depth-1)]
 	return [newfunc, recursive_helper(fn, depth-1)]
@@ -60,6 +60,10 @@ def evaluate_random_function(f, x, y):
 		return sin(pi*evaluate_random_function(f[1], x, y))
 	elif f[0] is "cos_pi":
 		return cos(pi*evaluate_random_function(f[1], x, y))
+	elif f[0] is "abs":
+		return abs(evaluate_random_function(f[1], x, y))
+	elif f[0] is "square":
+		return evaluate_random_function(f[1], x, y)**2
 
 
 def remap_interval(val, iis, iie, ois, oie):
