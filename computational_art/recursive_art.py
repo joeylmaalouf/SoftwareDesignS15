@@ -6,6 +6,7 @@ Franklin W. Olin College of Engineering
 from math import cos, pi, sin
 from PIL import Image
 from random import randint
+from scitools.std import movie
 
 
 def build_random_function(min_depth, max_depth):
@@ -17,17 +18,17 @@ def build_random_function(min_depth, max_depth):
 		max_depth: the maximum depth of the random function
 		returns: the randomly generated function
 	"""
-	return recursive_helper(None, randint(min_depth, max_depth))
+	return recursive_helper(randint(min_depth, max_depth))
 
 
-def recursive_helper(fn, depth):
+def recursive_helper(depth):
 	if depth == 0:
 		return ["x", "y"][randint(0, 1)]
 	fns = ["prod", "avg", "sin_pi", "cos_pi", "abs", "square"]
 	newfunc = fns[randint(0, 5)]
 	if newfunc is "prod" or newfunc is "avg":
-		return [newfunc, recursive_helper(fn, depth-1), recursive_helper(fn, depth-1)]
-	return [newfunc, recursive_helper(fn, depth-1)]
+		return [newfunc, recursive_helper(depth-1), recursive_helper(depth-1)]
+	return [newfunc, recursive_helper(depth-1)]
 
 
 def evaluate_random_function(f, x, y):
@@ -154,9 +155,12 @@ def generate_art(filename, x_size=350, y_size=350):
 				)
 
 	im.save(filename)
+	return im
 
 
 if __name__ == '__main__':
 	import doctest
 	doctest.testmod()
-	generate_art("computer_generated_art.png")
+	for i in range(120):
+		generate_art("./movie_frames/computer_generated_art_"+str(i)+".png")
+	movie("./movie_frames/computer_generated_art_*.png", fps=30, output_file="./movie.gif")
