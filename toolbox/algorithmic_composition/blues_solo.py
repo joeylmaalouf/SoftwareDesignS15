@@ -60,4 +60,4 @@ solo *= 0.75  #  adjust relative volumes to taste
 backing_track *= 2.0
 m.add(2.25, 0, solo)  #  delay the solo to match up with backing track   
 m.add(0, 0, backing_track)
-m.getStream(500.0) >> "slow_blues.wav"
+m.getStream(256.0) >> "slow_blues.wav"
