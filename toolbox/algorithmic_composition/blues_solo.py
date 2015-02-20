@@ -1,8 +1,12 @@
-""" Synthesizes a blues solo algorithmically """
+""" Synthesizes a blues solo algorithmically
+	Joey L. Maalouf
+"""
+
 
 from Nsound import *
 import numpy as np
 from random import choice
+
 
 def add_note(out, instr, key_num, duration, bpm, volume):
 	""" Adds a note from the given instrument to the specified stream
@@ -18,6 +22,7 @@ def add_note(out, instr, key_num, duration, bpm, volume):
 	stream = instr.play(duration*(60.0/bpm), freq)
 	stream *= volume
 	out << stream
+
 
 # this controls the sample rate for the sound file you will generate
 sampling_rate = 44100.0
