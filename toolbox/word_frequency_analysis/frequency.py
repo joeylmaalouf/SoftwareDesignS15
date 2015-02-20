@@ -3,7 +3,6 @@
 """
 import operator
 import string
-import sys
 
 
 def get_word_list(file_name):
@@ -49,11 +48,7 @@ def get_top_n_words(word_list, n):
 	return sorted(word_dict.items(), key = operator.itemgetter(1), reverse = True)[:n]
 
 
-def main(argv):
+if __name__ == "__main__":
 	top_words = get_top_n_words(get_word_list("./pg10148.txt"), 100)
 	for pair in top_words:
 		print(pair)
-
-
-if __name__ == "__main__":
-	main(sys.argv)
