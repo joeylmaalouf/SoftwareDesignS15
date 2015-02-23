@@ -9,12 +9,14 @@ from time        import sleep
 
 
 def get_data_from_url(url):
-	sleep(1)  #  be nice and don't overload the servers
+	#  be nice and don't overload the servers
+	sleep(1)
 	return loads(URL(url).download())
 
 
 def main(argv):
-	my_steam_api_key = ""  #  get from http://steamcommunity.com/dev/apikey, I'm not putting my unique key on GitHub
+	#  get from http://steamcommunity.com/dev/apikey, I'm not putting my unique key on GitHub
+	my_steam_api_key = ""
 
 	#  get the hero data, parse it, and reformat it into a dictionary of dictionaries
 	#  (not a list of dictionaries because not every hero id # is used)
@@ -36,7 +38,7 @@ def main(argv):
 	match_ids = [match["match_id"] for match in match_data]
 	del match_data
 
-	#  read in our previously collected data
+	#  read in our previously collected data, or make an empty database if it doesn't exist
 	file_name = "match_data_list.txt"
 	game_details = {}
 	if not exists(file_name):
@@ -55,7 +57,7 @@ def main(argv):
 		if new_game_details[match_id]["first_blood_time"] == 0:
 			del new_game_details[match_id]
 
-	#  for any newly found matches that aren't in the old database, add them
+	#  for any newly found matches that aren't in the old database, add their details
 	for match_id in new_game_details:
 		if match_id not in game_details:
 			game_details[match_id] = new_game_details[match_id]
