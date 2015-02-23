@@ -44,8 +44,10 @@ def main(argv):
 				hero_dict[player_hero]["win_count"] += 1
 				hero_dict[player_hero]["win_rate"] = float(hero_dict[player_hero]["win_count"])/hero_dict[player_hero]["pick_count"]
 
-	win_rates = [(h[1]["localized_name"], h[1]["win_rate"]) for h in hero_dict.items()]
-	win_rates = sorted(win_rates, key = itemgetter(1), reverse = True)
+	win_rates = [(h[1]["localized_name"], h[1]["win_count"], h[1]["pick_count"], h[1]["win_rate"]) for h in hero_dict.items()]
+	win_rates = sorted(win_rates, key = itemgetter(3), reverse = True)
+	print("Matches analyzed: "+str(len(game_details)))
+	print("Hero, Win Count, Pick Count, Win Rate")
 	pprint(win_rates)
 
 if __name__ == "__main__":
