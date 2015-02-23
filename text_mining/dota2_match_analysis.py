@@ -25,7 +25,7 @@ def main(argv):
 								 "win_rate": 0.0,}
 	del hero_data
 
-	num_matches = 20
+	num_matches = 100
 	matches_url = "https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?min_players=10&matches_requested="+str(num_matches)+"&key="+my_steam_api_key
 	match_data = get_data_from_url(matches_url)["result"]["matches"]
 	match_ids = [match["match_id"] for match in match_data]
@@ -42,12 +42,11 @@ def main(argv):
 				hero_dict[player_hero]["pick_count"] += 1
 			if (player["player_slot"] < 5 and radiant_win) or (player["player_slot"] > 127 and not radiant_win):
 				hero_dict[player_hero]["win_count"] += 1
+				hero_dict[player_hero]["win_rate"] = float(hero_dict[player_hero]["win_count"])/hero_dict[player_hero]["pick_count"]
 
-	for hero_id in hero_dict:
-		hero_dict[hero_id]["win_rate"] = float(hero_dict[hero_id]["win_count"])/hero_dict[hero_id]["pick_count"]
-
-	print(sorted(hero_dict.items(), key = itemgetter("win_rate"), reverse = True)[:10])
-
+	win_rates = [(h[1]["localized_name"], h[1]["win_rate"]) for h in hero_dict.items()]
+	win_rates = sorted(win_rates, key = itemgetter(1), reverse = True)
+	pprint(win_rates)
 
 if __name__ == "__main__":
 	main(argv)
