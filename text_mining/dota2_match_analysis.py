@@ -86,6 +86,14 @@ def main(argv):
 	print("Hero, Win Count, Pick Count, Win Rate")
 	pprint(win_rates)
 
+	#  save our output to a .csv file
+	file_object = open("match_results.csv", "wb")
+	output_string = ""
+	for hero in win_rates:
+		output_string += str(hero[0])+","+str(hero[1])+","+str(hero[2])+","+str(hero[3])+"\n"
+	file_object.write(output_string)
+	file_object.close()
+
 
 if __name__ == "__main__":
 	main(argv)
