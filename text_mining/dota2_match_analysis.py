@@ -14,7 +14,7 @@ def get_data_from_url(url):
 
 
 def main(argv):
-	my_steam_api_key = "2C71D960ED323C05E1A41D7FC41E1C60"  #  get from http://steamcommunity.com/dev/apikey, I'm not putting my unique key on GitHub
+	my_steam_api_key = ""  #  get from http://steamcommunity.com/dev/apikey, I'm not putting my unique key on GitHub
 
 	#  get the hero data, parse it, and reformat it into a dictionary of dictionaries
 	#  (not a list of dictionaries because not every hero id # is used)
