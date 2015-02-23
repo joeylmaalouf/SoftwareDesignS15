@@ -7,12 +7,12 @@ from time import sleep
 
 
 def get_data_from_url(url):
-	sleep(1)
+	sleep(1)  #  be nice and don't overload the servers
 	return loads(URL(url).download())
 
 
 def main(argv):
-	my_steam_api_key = "844A4778443A1AD62EB93C10766E3D23"
+	my_steam_api_key = ""  #  get from http://steamcommunity.com/dev/apikey, I'm not putting my unique key on GitHub
 
 	heroes_url = "https://api.steampowered.com/IEconDOTA2_570/GetHeroes/v0001/?language=en_us&key="+my_steam_api_key
 	hero_data = get_data_from_url(heroes_url)["result"]["heroes"]
@@ -40,8 +40,8 @@ def main(argv):
 			player_hero = player["hero_id"]
 			if player_hero in hero_dict:
 				hero_dict[player_hero]["pick_count"] += 1
-			if (player["player_slot"] < 5 and radiant_win) or (player["player_slot"] > 127 and not radiant_win):
-				hero_dict[player_hero]["win_count"] += 1
+				if (player["player_slot"] < 5 and radiant_win) or (player["player_slot"] > 127 and not radiant_win):
+					hero_dict[player_hero]["win_count"] += 1
 				hero_dict[player_hero]["win_rate"] = float(hero_dict[player_hero]["win_count"])/hero_dict[player_hero]["pick_count"]
 
 	win_rates = [(h[1]["localized_name"], h[1]["win_count"], h[1]["pick_count"], h[1]["win_rate"]) for h in hero_dict.items()]
@@ -49,6 +49,7 @@ def main(argv):
 	print("Matches analyzed: "+str(len(game_details)))
 	print("Hero, Win Count, Pick Count, Win Rate")
 	pprint(win_rates)
+
 
 if __name__ == "__main__":
 	main(argv)
