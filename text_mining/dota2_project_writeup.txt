@@ -1,0 +1,32 @@
+Joey L. Maalouf
+
+Project Overview
+	I gather my data from Valve's Steam Web API, and then increment the pick and win counts
+per hero by going through each game. I hoped to create an accurate representation of which
+heros where picked often, and how successful each hero generally is. The win rate is
+calculated as win count / pick count, and it is the value by which the results are sorted.
+
+Implementation
+	I made a few different API requests. The first is just to get an up-to-date list of heros,
+and their corresponding in-game ids. This returns a JSON array of dictionaries (inside a
+dictionary), which we can convert to a Python list of dictionaries. I then turn it into a
+dictionary of dictionaries, using one of the old values as the new key. I made this choice
+for ease of access; instead of iterating through the list and checking for the correct value
+that matches the hero_id key, I could just use the hero_id as the key. The next request gets
+the match ids (and some other basic data) of the most recently played 100 matches. It also
+returns a JSON dictionary containing an array of dictionaries. This time, we take just one
+value from each of the sub-dictionaries, so we only output a list of values. Then, we make
+a series of requests, one per match id, in order to get the details of each game. These JSON
+dictionaries are kept as dictionaries in Python, because we have no need to reformat the data.
+	Now that we have collected and reformatted all of our data, the next step is to analyze it.
+Every hero gained three dictionary entries tracking the number of times they were played, the
+number of times they one, and their win rate. This output is then sorted and saved to a .csv file.
+	Hopefully, the next step will be to train a neural network to predict the winning team,
+given nothing but the ids of the heroes on either team. NOTE TO SELF: REDO THIS PART IF I
+ACTUALLY ADD THAT. OR MAYBE SAVE THE MACHINE LEARNING FOR THE FINAL PROJECT. I DUNNO.
+
+Results
+...
+
+Reflection
+...

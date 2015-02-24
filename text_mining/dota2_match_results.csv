@@ -1,112 +1,112 @@
-Matches analyzed:35
+Matches analyzed:100
 HeroName,WinCount,PickCount,WinRate
-Morphling,2,2,1.0
-Storm Spirit,1,1,1.0
-Tiny,1,1,1.0
-Vengeful Spirit,3,3,1.0
 Slardar,1,1,1.0
-Warlock,1,1,1.0
-Beastmaster,4,4,1.0
-Queen of Pain,4,4,1.0
-Venomancer,1,1,1.0
-Huskar,2,2,1.0
-Broodmother,1,1,1.0
-Silencer,4,4,1.0
-Lone Druid,2,2,1.0
-Ogre Magi,2,2,1.0
-Io,1,1,1.0
-Drow Ranger,5,6,0.833333333333
-Nature's Prophet,4,5,0.8
-Crystal Maiden,3,4,0.75
-Phantom Lancer,3,4,0.75
-Sven,3,4,0.75
-Pugna,3,4,0.75
-Luna,3,4,0.75
-Magnus,3,4,0.75
-Juggernaut,4,6,0.666666666667
-Kunkka,2,3,0.666666666667
-Lina,4,6,0.666666666667
-Tidehunter,2,3,0.666666666667
-Templar Assassin,4,6,0.666666666667
-Jakiro,2,3,0.666666666667
-Meepo,2,3,0.666666666667
-Medusa,2,3,0.666666666667
-Skywrath Mage,2,3,0.666666666667
-Lich,3,5,0.6
-Lycan,3,5,0.6
-Terrorblade,3,5,0.6
-Windranger,4,7,0.571428571429
-Rubick,4,7,0.571428571429
-Axe,5,9,0.555555555556
-Sniper,5,9,0.555555555556
-Bane,1,2,0.5
-Bloodseeker,1,2,0.5
-Mirana,3,6,0.5
-Sand King,1,2,0.5
-Lion,3,6,0.5
-Tinker,1,2,0.5
-Faceless Void,1,2,0.5
-Wraith King,2,4,0.5
-Dazzle,2,4,0.5
-Leshrac,1,2,0.5
-Clinkz,1,2,0.5
-Bounty Hunter,3,6,0.5
-Doom,1,2,0.5
-Brewmaster,1,2,0.5
-Chaos Knight,1,2,0.5
-Undying,1,2,0.5
-Nyx Assassin,1,2,0.5
-Centaur Warrunner,1,2,0.5
-Elder Titan,1,2,0.5
-Ember Spirit,2,4,0.5
-Winter Wyvern,1,2,0.5
-Shadow Fiend,2,5,0.4
+Vengeful Spirit,26,27,0.962962962963
+Leshrac,24,25,0.96
+Venomancer,18,19,0.947368421053
+Luna,37,40,0.925
+Nature's Prophet,46,51,0.901960784314
+Enigma,33,37,0.891891891892
+Beastmaster,15,17,0.882352941176
+Lycan,36,41,0.878048780488
+Drow Ranger,16,19,0.842105263158
+Pugna,7,9,0.777777777778
+Axe,16,22,0.727272727273
+Broodmother,8,11,0.727272727273
+Phantom Lancer,4,6,0.666666666667
+Enchantress,2,3,0.666666666667
+Huskar,4,6,0.666666666667
+Silencer,8,12,0.666666666667
+Lone Druid,4,6,0.666666666667
+Jakiro,9,14,0.642857142857
+Windranger,7,11,0.636363636364
+Sniper,11,18,0.611111111111
+Kunkka,3,5,0.6
+Queen of Pain,4,7,0.571428571429
+Templar Assassin,6,11,0.545454545455
+Juggernaut,5,10,0.5
+Tiny,1,2,0.5
+Lina,5,10,0.5
+Tidehunter,3,6,0.5
+Lich,4,8,0.5
+Faceless Void,2,4,0.5
+Clockwerk,2,4,0.5
+Medusa,3,6,0.5
+Centaur Warrunner,2,4,0.5
+Skywrath Mage,3,6,0.5
+Sven,4,9,0.444444444444
+Bounty Hunter,4,9,0.444444444444
+Sand King,3,7,0.428571428571
+Magnus,3,7,0.428571428571
+Rubick,5,12,0.416666666667
 Puck,2,5,0.4
-Zeus,2,5,0.4
-Witch Doctor,2,5,0.4
-Riki,2,5,0.4
-Lifestealer,2,5,0.4
-Omniknight,2,5,0.4
-Bristleback,2,5,0.4
-Pudge,3,8,0.375
-Razor,1,3,0.333333333333
-Enigma,1,3,0.333333333333
-Death Prophet,1,3,0.333333333333
-Dragon Knight,1,3,0.333333333333
-Dark Seer,1,3,0.333333333333
-Spectre,1,3,0.333333333333
-Shadow Demon,1,3,0.333333333333
-Treant Protector,1,3,0.333333333333
-Slark,2,6,0.333333333333
-Abaddon,1,3,0.333333333333
-Techies,1,3,0.333333333333
-Anti-Mage,1,4,0.25
-Necrophos,1,4,0.25
-Legion Commander,1,4,0.25
-Weaver,1,5,0.2
-Invoker,1,5,0.2
-Earthshaker,0,1,0.0
-Shadow Shaman,0,0,0.0
-Phantom Assassin,0,0,0.0
-Viper,0,4,0.0
-Clockwerk,0,0,0.0
-Enchantress,0,0,0.0
-Night Stalker,0,1,0.0
-Batrider,0,0,0.0
-Chen,0,1,0.0
-Ancient Apparition,0,2,0.0
-Ursa,0,1,0.0
-Spirit Breaker,0,0,0.0
-Gyrocopter,0,1,0.0
-Alchemist,0,3,0.0
-Outworld Devourer,0,1,0.0
-Disruptor,0,2,0.0
-Naga Siren,0,1,0.0
-Keeper of the Light,0,2,0.0
-Visage,0,1,0.0
-Troll Warlord,0,7,0.0
-Timbersaw,0,2,0.0
-Tusk,0,1,0.0
-Earth Spirit,0,1,0.0
-Phoenix,0,0,0.0
-Oracle,0,0,0.0
+Tinker,2,5,0.4
+Keeper of the Light,2,5,0.4
+Ember Spirit,2,5,0.4
+Terrorblade,4,10,0.4
+Crystal Maiden,3,8,0.375
+Mirana,3,8,0.375
+Lion,3,8,0.375
+Necrophos,3,8,0.375
+Bane,1,3,0.333333333333
+Shadow Fiend,3,9,0.333333333333
+Storm Spirit,1,3,0.333333333333
+Warlock,2,6,0.333333333333
+Wraith King,3,9,0.333333333333
+Phantom Assassin,1,3,0.333333333333
+Viper,3,9,0.333333333333
+Dragon Knight,2,6,0.333333333333
+Lifestealer,2,6,0.333333333333
+Chaos Knight,1,3,0.333333333333
+Ogre Magi,2,6,0.333333333333
+Nyx Assassin,1,3,0.333333333333
+Legion Commander,3,9,0.333333333333
+Zeus,3,10,0.3
+Witch Doctor,3,10,0.3
+Riki,3,10,0.3
+Slark,2,7,0.285714285714
+Pudge,4,15,0.266666666667
+Death Prophet,1,4,0.25
+Dark Seer,1,4,0.25
+Omniknight,2,8,0.25
+Ursa,1,4,0.25
+Spirit Breaker,1,4,0.25
+Bristleback,2,8,0.25
+Elder Titan,1,4,0.25
+Dazzle,2,9,0.222222222222
+Meepo,2,9,0.222222222222
+Anti-Mage,2,10,0.2
+Razor,1,5,0.2
+Clinkz,1,5,0.2
+Brewmaster,1,5,0.2
+Shadow Demon,1,5,0.2
+Undying,1,5,0.2
+Abaddon,1,5,0.2
+Earth Spirit,1,5,0.2
+Winter Wyvern,2,10,0.2
+Techies,3,17,0.176470588235
+Bloodseeker,1,6,0.166666666667
+Doom,1,6,0.166666666667
+Disruptor,1,6,0.166666666667
+Morphling,2,13,0.153846153846
+Weaver,1,7,0.142857142857
+Spectre,1,8,0.125
+Treant Protector,1,8,0.125
+Naga Siren,1,8,0.125
+Invoker,1,10,0.1
+Io,1,11,0.0909090909091
+Troll Warlord,1,11,0.0909090909091
+Earthshaker,0,4,0.0
+Shadow Shaman,0,2,0.0
+Night Stalker,0,2,0.0
+Batrider,0,2,0.0
+Chen,0,5,0.0
+Ancient Apparition,0,5,0.0
+Gyrocopter,0,2,0.0
+Alchemist,0,4,0.0
+Outworld Devourer,0,3,0.0
+Visage,0,5,0.0
+Timbersaw,0,5,0.0
+Tusk,0,5,0.0
+Phoenix,0,3,0.0
+Oracle,0,5,0.0

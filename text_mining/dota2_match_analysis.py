@@ -80,8 +80,6 @@ def main(argv):
 	new_game_details = {}
 	for match_id in match_ids:
 		new_game_details[match_id] = get_data_from_url(steam_base_url+"IDOTA2Match_570/GetMatchDetails/V001/?match_id="+str(match_id)+"&key="+my_steam_api_key)["result"]
-		if new_game_details[match_id]["first_blood_time"] == 0:
-			del new_game_details[match_id]
 
 	#  ----  DATABASE ADDITIONS  -----------------------------------------------
 	#  for any new matches that aren't in the old database, add their details
