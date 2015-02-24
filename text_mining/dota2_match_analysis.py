@@ -36,6 +36,7 @@ def main(argv):
 	#  http://steamcommunity.com/dev/apikey
 	my_steam_api_key = ""
 	steam_base_url = "https://api.steampowered.com/"
+	marker_file = "dota2_match_id_marker.txt"
 	data_file = "dota2_match_data_list.txt"
 	output_file = "dota2_match_results.csv"
 
@@ -54,14 +55,6 @@ def main(argv):
 								 "win_rate": 0.0}
 	del hero_data
 
-	#  ----  ID PULLING  -------------------------------------------------------
-	#  get the most recent matches and pull their ids
-	num_matches = 100
-	matches_url = steam_base_url+"IDOTA2Match_570/GetMatchHistory/V001/?min_players=10&matches_requested="+str(num_matches)+"&key="+my_steam_api_key
-	match_data = get_data_from_url(matches_url)["result"]["matches"]
-	match_ids = [match["match_id"] for match in match_data]
-	del match_data
-
 	#  ----  UNPICKLING  -------------------------------------------------------
 	#  read in our previously collected data,
 	#  or make an empty database if it doesn't exist
@@ -75,18 +68,33 @@ def main(argv):
 		game_details = load(file_object)
 		file_object.close()
 
-	#  ----  DETAIL ACQUISITION  -----------------------------------------------
-	#  using the above ids, get the detailed information for each game
-	new_game_details = {}
-	for match_id in match_ids:
-		new_game_details[match_id] = get_data_from_url(steam_base_url+"IDOTA2Match_570/GetMatchDetails/V001/?match_id="+str(match_id)+"&key="+my_steam_api_key)["result"]
+	#  ----  DATA PULLING  -----------------------------------------------------
+	#  get the details of the matches we're looking at, and update our file
+	#  that keeps track of the most recent match id that we looked at
+	num_matches = 100
+	if exists(marker_file):
+		file_object = open(marker_file, "r")
+		seq_num = file_object.read()
+		file_object.close()
+	else:
+		seq_num = "0"
+	matches_url = steam_base_url+"IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?min_players=10&matches_requested="+str(num_matches)+"&start_at_match_seq_num="+seq_num+"&key="+my_steam_api_key
+	match_data_list = get_data_from_url(matches_url)["result"]["matches"]
+	match_dict = {}
+	for match in match_data_list:
+		match_dict[match["match_id"]] = match
+	del match_data_list
+	seq_num = str(match_dict.keys()[-1])
+	file_object = open(marker_file, "w")
+	file_object.write(seq_num)
+	file_object.close()
 
 	#  ----  DATABASE ADDITIONS  -----------------------------------------------
 	#  for any new matches that aren't in the old database, add their details
-	for match_id in new_game_details:
+	for match_id in match_dict:
 		if match_id not in game_details:
-			game_details[match_id] = new_game_details[match_id]
-	del new_game_details
+			game_details[match_id] = match_dict[match_id]
+	del match_dict
 
 	#  ----  PICKLING  ---------------------------------------------------------
 	#  save our new dict of matches
@@ -109,7 +117,7 @@ def main(argv):
 	#  ----  STAT SORTING  -----------------------------------------------------
 	#  pull the informative stats and sort the list of tuples
 	win_rates = [(h[1]["localized_name"], h[1]["win_count"], h[1]["pick_count"], h[1]["win_rate"]) for h in hero_dict.items()]
-	win_rates = sorted(win_rates, key = itemgetter(3), reverse = True)
+	win_rates.sort(key = itemgetter(3), reverse = True)
 
 	#  ----  ANALYSIS OUTPUT  --------------------------------------------------
 	#  save our output to a .csv file
