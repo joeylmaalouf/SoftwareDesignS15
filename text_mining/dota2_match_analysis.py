@@ -34,7 +34,7 @@ def main(argv):
 	#  ----  GENERAL PURPOSE VARIABLES  ----------------------------------------
 	#  I'm not putting my unique key on GitHub, get a key from
 	#  http://steamcommunity.com/dev/apikey
-	my_steam_api_key = ""
+	my_steam_api_key = "E53971E5D4A543DA52BE6ED90230C33B"
 	steam_base_url = "https://api.steampowered.com/"
 	marker_file = "dota2_match_id_marker.txt"
 	data_file = "dota2_match_data_list.txt"
@@ -121,8 +121,8 @@ def main(argv):
 
 	#  ----  ANALYSIS OUTPUT  --------------------------------------------------
 	#  save our output to a .csv file
-	file_object = open(output_file, "wb")
-	output_string = "Matches analyzed:"+str(len(game_details))+"\nHeroName,WinCount,PickCount,WinRate\n"
+	file_object = open(output_file, "w")
+	output_string = "Matches analyzed: "+str(len(game_details))+"! HeroName,WinCount,PickCount,WinRate\n"
 	for hero in win_rates:
 		output_string += str(hero[0])+","+str(hero[1])+","+str(hero[2])+","+str(hero[3])+"\n"
 	file_object.write(output_string)
