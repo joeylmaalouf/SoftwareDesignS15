@@ -27,7 +27,7 @@ dictionaries are kept as dictionaries in Python, because we have no need to refo
 	Now that we have collected and reformatted all of our data, the next step is to analyze it.
 Every hero gained three dictionary entries tracking the number of times they were played, the
 number of times they one, and their win rate. This output is then sorted and saved to a .csv file.
-	Hopefully, the next step will be to train a neural network to predict the winning team,
+	Hopefully, the next step will be to train a model to predict the winning team,
 given nothing but the ids of the heroes on either team. NOTE TO SELF: REDO THIS PART IF I
 ACTUALLY ADD THAT. OR MAYBE SAVE THE MACHINE LEARNING FOR THE FINAL PROJECT. I DUNNO.
 

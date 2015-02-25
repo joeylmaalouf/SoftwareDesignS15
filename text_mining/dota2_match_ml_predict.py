@@ -9,10 +9,19 @@
 
 
 #  module imports
-from cPickle import load
-from os.path import exists
-from pprint  import pprint
-from sys     import argv
+from cPickle     import load
+from numpy       import array
+from os.path     import exists
+from pprint      import pprint
+from sklearn.svm import SVC
+from sys         import argv
+
+
+def parse(data, x, y):
+	for game in data:
+		x.append([float(player["hero_id"]) for player in game["players"]])
+		y.append(game["radiant_win"])
+	data = zip(x, y)
 
 
 def main(argv):
@@ -22,13 +31,25 @@ def main(argv):
 		file_object = open(data_file, "rb")
 		game_details = load(file_object)
 		file_object.close()
-	train_x = []
-	train_y = []
-	for game in game_details.values():
-		train_x.append([player["hero_id"] for player in game["players"]])
-		train_y.append(game["radiant_win"])
-	#  pprint(zip(train_x, train_y))
-	#  use thenao? train neural net here
+
+	train_xy = game_details.values()[:-10]
+	train_x, train_y = [], []
+	test_xy = game_details.values()[-10:]
+	test_x, test_y = [], []
+
+	parse(train_xy, train_x, train_y)
+	parse(test_xy, test_x, test_y)
+
+	train_x = array(train_x)
+	train_y = array(train_y)
+	test_x = array(test_x)
+	test_y = array(test_y)
+
+	print(test_x)
+
+	svc = SVC(kernel = "linear")
+	svc.fit(train_x, train_y)
+	pprint(svc.predict(test_x) == test_y)
 
 
 if __name__ == "__main__":
