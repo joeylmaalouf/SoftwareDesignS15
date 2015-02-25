@@ -80,7 +80,7 @@ def main(argv):
 		seq_num = file_object.read()
 		file_object.close()
 	else:
-		seq_num = "0"
+		seq_num = "500000000"
 	matches_url = steam_base_url+"IDOTA2Match_570/GetMatchHistoryBySequenceNum/V001/?min_players=10&matches_requested="+str(num_matches)+"&start_at_match_seq_num="+seq_num+"&key="+my_steam_api_key
 	match_data_list = get_data_from_url(matches_url)["result"]["matches"]
 	match_dict = {}
