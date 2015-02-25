@@ -1,38 +1,51 @@
-REWRITE PARTS OF THIS TO ACCOUNT FOR REDONE API CALLS AND
-NEWFOUND ABILITY TO GET ALL RECORDED MATCH DATA FROM THE VERY START :D
-EDIT: REWRITE AGAIN TO NOTE THAT I CAN'T USE THAT MUCH DATA IN A
-REASONABLE AMOUNT OF TIME
-
-
 Joey L. Maalouf
 
 Project Overview
+	dota2_match_analysis.py:
 	I gather my data from Valve's Steam Web API, and then increment the pick and win counts
 per hero by going through each game. I hoped to create an accurate representation of which
 heros where picked often, and how successful each hero generally is. The win rate is
 calculated as win count / pick count, and it is the value by which the results are sorted.
+	dota2_match_ml_predict.py:
+	I load in the saved match data and train a support vector classifier using scikit-learn.
+Initially, I wanted to implement a neural network using theano, but I ran out of time. The
+model can take in a set of 10 hero ids, 5 per team, and predict which team will win.
 
 Implementation
-	I made a few different API requests. The first is just to get an up-to-date list of heros,
+	dota2_match_analysis.py:
+	I made two different API requests. The first is just to get an up-to-date list of heros,
 and their corresponding in-game ids. This returns a JSON array of dictionaries (inside a
 dictionary), which we can convert to a Python list of dictionaries. I then turn it into a
 dictionary of dictionaries, using one of the old values as the new key. I made this choice
 for ease of access; instead of iterating through the list and checking for the correct value
 that matches the hero_id key, I could just use the hero_id as the key. The next request gets
-the match ids (and some other basic data) of the most recently played 100 matches. It also
-returns a JSON dictionary containing an array of dictionaries. This time, we take just one
-value from each of the sub-dictionaries, so we only output a list of values. Then, we make
-a series of requests, one per match id, in order to get the details of each game. These JSON
-dictionaries are kept as dictionaries in Python, because we have no need to reformat the data.
+the match details of 100 matches, starting at some specified match id. I increment this saved
+id each time in order to get the next 100 matches every time I run the program, so I keep
+getting new data. Like the other call, this one also returns a JSON dictionary containing an
+array of dictionaries.
 	Now that we have collected and reformatted all of our data, the next step is to analyze it.
 Every hero gained three dictionary entries tracking the number of times they were played, the
 number of times they one, and their win rate. This output is then sorted and saved to a .csv file.
-	Hopefully, the next step will be to train a model to predict the winning team,
-given nothing but the ids of the heroes on either team. NOTE TO SELF: REDO THIS PART IF I
-ACTUALLY ADD THAT. OR MAYBE SAVE THE MACHINE LEARNING FOR THE FINAL PROJECT. I DUNNO.
+	dota2_match_ml_predict.py:
+	First, after reading in our match data, we split it into training data (75%) and testing
+data (25%). Next, we extract from each game the relevant features (hero ids) and corresponding
+outputs (which team won). The lists of training data are used to train our SVC model, then
+the lists of testing data are used to test its accuracy on "new" data.
 
 Results
-...
+	Please see dota2_match_results.csv for the actual calculated results. We can see that the
+most recently added heroes have extremely low win rates, likely due to the fact that nobody
+knows how to really play them yet. Also placing low are the more complex carries, who require
+a fair amount of practice to play proficiently. Meanwhile, the highest win rates tend to belong
+to supports and initiators, with very few carries actually placing extremely high. This is
+probably due to the supports' low pick rates, so every win increases their rate dramatically,
+and the initiators' ability to turn the tide of a game with a good opening to a teamfight.
 
 Reflection
-...
+	The majority of this project went very well, but there was one thing that I could have
+improved, and that was scoping. I didn't realize how much time my other assignments would
+take up, so I didn't get to focus as much on the machine learning implementation as I would
+have liked. However, the focus of the assignment was on data mining from web sources, which
+I covered well. I do wish that I had realized just how many pieces of data I had to work with,
+though; I initially wanted to analyze all recorded matches, then I realized that there were
+1.2 billion and I limited my database to 800.
