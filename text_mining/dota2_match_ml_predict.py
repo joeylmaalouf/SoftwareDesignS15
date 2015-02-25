@@ -45,11 +45,10 @@ def main(argv):
 	test_x = array(test_x)
 	test_y = array(test_y)
 
-	print(test_x)
-
 	svc = SVC(kernel = "linear")
 	svc.fit(train_x, train_y)
-	pprint(svc.predict(test_x) == test_y)
+	prediction = svc.predict(test_x)
+	pprint([prediction[i] == test_y[i] for i in range(len(prediction))])
 
 
 if __name__ == "__main__":
