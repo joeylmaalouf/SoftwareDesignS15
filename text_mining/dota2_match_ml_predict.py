@@ -22,6 +22,13 @@ def parse(data, x, y):
 		x.append([float(player["hero_id"]) for player in game["players"]])
 		y.append(game["radiant_win"])
 	data = zip(x, y)
+	try:
+		for i in range(len(x)):
+			if len(x[i]) < 10:
+				del x[i]
+				del y[i]
+	except IndexError:
+		pass
 
 
 def main(argv):
@@ -32,9 +39,11 @@ def main(argv):
 		game_details = load(file_object)
 		file_object.close()
 
-	train_xy = game_details.values()[:-10]
+	size = len(game_details)
+	print(str(size)+" samples")
+	train_xy = game_details.values()[:-size/4]
 	train_x, train_y = [], []
-	test_xy = game_details.values()[-10:]
+	test_xy = game_details.values()[-size/4:]
 	test_x, test_y = [], []
 
 	parse(train_xy, train_x, train_y)
@@ -48,7 +57,9 @@ def main(argv):
 	svc = SVC(kernel = "linear")
 	svc.fit(train_x, train_y)
 	prediction = svc.predict(test_x)
-	pprint([prediction[i] == test_y[i] for i in range(len(prediction))])
+	results = [int(prediction[i] == test_y[i]) for i in range(len(prediction))]
+	accuracy = float(sum(results))/len(results)
+	print("{:0.2f}".format(accuracy*100)+"% accuracy")
 
 
 if __name__ == "__main__":
