@@ -34,9 +34,6 @@ def main(argv):
 	#  ----  GENERAL PURPOSE VARIABLES  ----------------------------------------
 	#  I'm not putting my unique key on GitHub, get a key from
 	#  http://steamcommunity.com/dev/apikey
-	#  Readers may note that the marker and data files are not kept on GitHub;
-	#  we only really care about the output file, and these data files are
-	#  intermediary, and will be made anew if you wish to use this code
 	my_steam_api_key = ""
 	steam_base_url = "https://api.steampowered.com/"
 	marker_file = "dota2_match_id_marker.txt"
