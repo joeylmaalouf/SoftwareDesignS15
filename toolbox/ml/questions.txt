@@ -1,0 +1,5 @@
+Joey L. Maalouf
+1. The accuracy curve increases at a decreasing rate.
+2. The lower end of the curve seems to have more noise, because it has less data to learn from and therefore varies wildly in accuracy.
+3. The graph becomes satisfyingly smooth after about 100 trials.
+4. Larger values of C result in much higher accuracies overall.
