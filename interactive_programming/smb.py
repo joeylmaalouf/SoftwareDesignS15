@@ -1,5 +1,7 @@
 """ Super Meat Boy in Python
 	Joey L. Maalouf
+
+	NOTE TO SELF: ADD VELOCITY AND ACCLERATION TO PLAYER, LIKE IN SMASH 5
 """
 import pygame
 import sys
@@ -32,17 +34,23 @@ class MeatBoy(Box):
 		the player's current state.
 	"""
 
-	def __init__(self, size = (16, 16), pos = (0, 0), speed = 1):
+	def __init__(self, size = (16, 16), pos = (100, 100), speed = (0, 0)):
 		super(MeatBoy, self).__init__(size, pos)
-		self.speed = speed
+		self.vx = speed[0]
+		self.vy = speed[1]
+		self.grounded = False
+		self.alive = True
 
 	def move_to(self, x, y):
 		self.x = x
 		self.y = y
 
-	def move_by(self, dx, dy):
-		self.x += dx
-		self.y += dy
+	def move_by(self, vx, vy):
+		self.x += vx
+		self.y += vy
+
+	def tangent_to(self, block):
+		pass
 
 
 class Level(object):
@@ -53,8 +61,8 @@ class Level(object):
 	def __init__(self):
 		self.blocks = []
 
-	def add_piece(self):
-		pass
+	def add_piece(self, w, h, x, y):
+		self.blocks.append(Box((w, h), (x, y)))
 
 
 class Game(object):
@@ -70,29 +78,51 @@ class Game(object):
 
 	def update(self, player, level):
 		for event in pygame.event.get():
-			if (event.type == pygame.QUIT) or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+			if (event.type == pygame.QUIT):
 				sys.exit()
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					sys.exit()
+				if player.grounded and event.key == pygame.K_SPACE:
+					player.vy = -4
 
+		player.vy += .05
 		state = pygame.key.get_pressed()
-		if state[pygame.K_LEFT] or state[pygame.K_a]:
-			player.move_by(-player.speed, 0)
-		if state[pygame.K_RIGHT] or state[pygame.K_d]:
-			player.move_by(player.speed, 0)
+		if state[pygame.K_a]:
+			player.vx = -1
+		if state[pygame.K_d]:
+			player.vx = 1
+		if not (state[pygame.K_a] or state[pygame.K_d]):
+			player.vx = 0
+
+		player.move_by(player.vx, player.vy)
+
+		for block in level.blocks:
+			if player.tangent_to(block):
+				player.grounded = True
+				break
+			player.grounded = False
+
+		if not player.rect().colliderect(self.screen.get_rect()):
+			player.alive = False
 
 	def draw(self, player, level):
 		self.screen.fill((0, 0, 0))
 		pygame.draw.rect(self.screen, (200, 0, 0), player.rect())
 		for block in level.blocks:
-			pygame.draw.rect(self.screen, (100, 100, 100), blocks.rect())
+			pygame.draw.rect(self.screen, (128, 128, 128), block.rect())
 
 
 def main(argv):
 	pygame.init()
-	size = (pygame.display.Info().current_w*3/4, pygame.display.Info().current_h*3/4)
+	size = (1280, 720)
 	game_object = Game(size)
 	player = MeatBoy()
 	level1 = Level()
-	level1.add_piece()
+	#  level1.add_piece(1280, 4, 0, 716)
+	level1.add_piece(128, 12, 8, 400)
+	level1.add_piece(48, 24, 200, 500)
+	level1.add_piece(48, 24, 300, 550)
 
 	while 1:
 		game_object.update(player, level1)
