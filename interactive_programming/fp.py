@@ -1,7 +1,7 @@
 """ Floating Point
 	in Python.
 """
-from base import Box, Entity, Level
+from base import Entity, Level
 import pygame
 import sys
 import time

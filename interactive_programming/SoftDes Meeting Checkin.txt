@@ -1,0 +1,14 @@
+SoftDes Meeting Checkin
+Joey Maalouf
+Daniel Bishop
+
+Notes:
+-focus on quality over quantity
+-consider difference between game vs demo
+	(e.g. actually having multiple levels vs. showing the capability for multiple levels)
+-maybe keep multiple games if they interact differently?
+
+For Next Time:
+-flesh out current ideas
+-brainstorm more input ideas
+-maybe have one or two games with keyboard input, one with camera input, etc.
