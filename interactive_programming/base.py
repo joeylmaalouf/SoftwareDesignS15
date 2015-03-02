@@ -1,0 +1,46 @@
+""" To be imported and used in other files.
+"""
+import pygame
+
+
+class Box(object):
+	""" The Box object, from which
+		other classes inherit stuff.
+	"""
+
+	def __init__(self, size = (40, 20), pos = (0, 0)):
+		self.w = size[0]
+		self.h = size[1]
+		self.x = pos[0]
+		self.y = pos[1]
+
+	def __str__(self):
+		return str(self.w)+"x"+str(self.h)+" at "+str(self.x)+","+str(self.y)
+
+	def rect(self):
+		return pygame.Rect(self.x, self.y, self.w, self.h)
+
+	def size(self):
+		return (self.w, self.h)
+
+	def pos(self):
+		return (self.x, self.y)
+
+
+class Entity(Box):
+	""" The Entity object, an extension of
+		the Box class that adds movement.
+	"""
+
+	def __init__(self, size = (16, 16), pos = (100, 100), speed = (0, 0)):
+		super(Entity, self).__init__(size, pos)
+		self.vx = speed[0]
+		self.vy = speed[1]
+
+	def move_to(self, x, y):
+		self.x = x
+		self.y = y
+
+	def move_by(self, vx, vy):
+		self.x += vx
+		self.y += vy

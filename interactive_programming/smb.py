@@ -1,56 +1,24 @@
 """ Super Meat Boy in Python
-	Joey L. Maalouf
-
-	NOTE TO SELF: ADD VELOCITY AND ACCLERATION TO PLAYER, LIKE IN SMASH 5
 """
+from base import Box, Entity
 import pygame
 import sys
 import time
 
 
-class Box(object):
-	""" The Box object, from which
-		other classes inherit stuff.
-	"""
-
-	def __init__(self, size = (40, 20), pos = (0, 0)):
-		self.w = size[0]
-		self.h = size[1]
-		self.x = pos[0]
-		self.y = pos[1]
-
-	def rect(self):
-		return pygame.Rect(self.x, self.y, self.w, self.h)
-
-	def size(self):
-		return (self.w, self.h)
-
-	def pos(self):
-		return (self.x, self.y)
-
-
-class MeatBoy(Box):
+class MeatBoy(Entity):
 	""" The Player object, representing
 		the player's current state.
 	"""
 
-	def __init__(self, size = (16, 16), pos = (100, 100), speed = (0, 0)):
+	def __init__(self, size = (20, 20), pos = (100, 100), speed = (0, 0)):
 		super(MeatBoy, self).__init__(size, pos)
 		self.vx = speed[0]
 		self.vy = speed[1]
 		self.grounded = False
 		self.alive = True
-
-	def move_to(self, x, y):
-		self.x = x
-		self.y = y
-
-	def move_by(self, vx, vy):
-		self.x += vx
-		self.y += vy
-
-	def tangent_to(self, block):
-		pass
+		self.deaths = 0
+		self.won = False
 
 
 class Level(object):
@@ -58,11 +26,20 @@ class Level(object):
 		the current level's state.
 	"""
 
-	def __init__(self):
+	def __init__(self, sx, sy):
+		self.spawn = (sx, sy)
 		self.blocks = []
+		self.enemies = []
+		self.goals = []
 
 	def add_piece(self, w, h, x, y):
 		self.blocks.append(Box((w, h), (x, y)))
+
+	def add_enemy(self, w, h, x, y, vx, vy):
+		self.enemies.append(Entity((w, h), (x, y), (vx, vy)))
+
+	def add_goal(self, w, h, x, y):
+		self.goals.append(Box((w, h), (x, y)))
 
 
 class Game(object):
@@ -70,23 +47,19 @@ class Game(object):
 		the overall game state.
 	"""
 
-	def __init__(self, resolution):
+	def __init__(self, resolution, font):
 		super(Game, self).__init__()
 		self.resolution = resolution
+		self.font = font
 		self.screen = pygame.display.set_mode(resolution)
 		pygame.display.set_caption("Super Meat Boy")
 
 	def update(self, player, level):
-		for event in pygame.event.get():
-			if (event.type == pygame.QUIT):
-				sys.exit()
-			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_ESCAPE:
-					sys.exit()
-				if player.grounded and event.key == pygame.K_SPACE:
-					player.vy = -4
+		if not player.alive:
+			player.deaths += 1
+			player.move_to(level.spawn[0], level.spawn[1])
+			player.alive = True
 
-		player.vy += .05
 		state = pygame.key.get_pressed()
 		if state[pygame.K_a]:
 			player.vx = -1
@@ -95,10 +68,23 @@ class Game(object):
 		if not (state[pygame.K_a] or state[pygame.K_d]):
 			player.vx = 0
 
+		player.vy = min(4, player.vy+0.05)
+		if player.grounded:
+			player.vy = 0
+
+		for event in pygame.event.get():
+			if (event.type == pygame.QUIT):
+				sys.exit()
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE:
+					sys.exit()
+				if player.grounded and event.key == pygame.K_w:
+					player.vy -= 4
+
 		player.move_by(player.vx, player.vy)
 
 		for block in level.blocks:
-			if player.tangent_to(block):
+			if player.rect().colliderect(block):
 				player.grounded = True
 				break
 			player.grounded = False
@@ -106,29 +92,65 @@ class Game(object):
 		if not player.rect().colliderect(self.screen.get_rect()):
 			player.alive = False
 
+		for enemy in level.enemies:
+			if player.rect().colliderect(enemy):
+				player.alive = False
+			enemy.move_by(enemy.vx, enemy.vy)
+			if enemy.y+enemy.h/2 > self.resolution[1]:
+				enemy.y = enemy.h/2
+			elif enemy.y+enemy.h/2 < 0:
+				enemy.y = self.resolution[1]-enemy.h/2
+
+		for goal in level.goals:
+			if player.rect().colliderect(goal):
+				player.won = True
+
 	def draw(self, player, level):
-		self.screen.fill((0, 0, 0))
-		pygame.draw.rect(self.screen, (200, 0, 0), player.rect())
-		for block in level.blocks:
-			pygame.draw.rect(self.screen, (128, 128, 128), block.rect())
+		if player.won:
+			win_label = self.font.render("You win!", 1, (255, 255, 0))
+			self.screen.blit(win_label, (620, 320))
+			pygame.display.flip()
+			time.sleep(2)
+			sys.exit()
+		else:
+			self.screen.fill((0, 0, 0))
+			pygame.draw.rect(self.screen, (200, 0, 0), player.rect())
+			for block in level.blocks:
+				pygame.draw.rect(self.screen, (128, 128, 128), block.rect())
+			for enemy in level.enemies:
+				pygame.draw.rect(self.screen, (255, 128, 0), enemy.rect())
+			for goal in level.goals:
+				pygame.draw.rect(self.screen, (0, 255, 0), goal.rect())
+			control_label = self.font.render("Use WASD to move. Avoid the enemies and make it to the goal!", 1, (255, 255, 255))
+			self.screen.blit(control_label, (16, 16))
+			death_label = self.font.render(str(player.deaths)+(" Death" if player.deaths == 1 else " Deaths"), 1, (0, 255, 255))
+			self.screen.blit(death_label, (16, 684))
 
 
 def main(argv):
 	pygame.init()
+	font = pygame.font.SysFont("monospace", 16)
 	size = (1280, 720)
-	game_object = Game(size)
-	player = MeatBoy()
-	level1 = Level()
-	#  level1.add_piece(1280, 4, 0, 716)
+	game_object = Game(size, font)
+	level1 = Level(100, 100)
+	player = MeatBoy(pos = level1.spawn)
 	level1.add_piece(128, 12, 8, 400)
-	level1.add_piece(48, 24, 200, 500)
-	level1.add_piece(48, 24, 300, 550)
+	level1.add_piece(64, 10, 180, 480)
+	level1.add_piece(80, 8, 300, 550)
+	level1.add_enemy(24, 24, 430, 8, 0, 1)
+	level1.add_enemy(24, 24, 430, 360, 0, 1)
+	level1.add_piece(80, 12, 500, 500)
+	level1.add_piece(96, 16, 640, 600)
+	level1.add_piece(64, 16, 800, 560)
+	level1.add_enemy(32, 32, 900, 8, 0, -1.5)
+	level1.add_enemy(32, 32, 900, 360, 0, -1.5)
+	level1.add_goal(64, 64, 1000, 500)
 
 	while 1:
 		game_object.update(player, level1)
 		game_object.draw(player, level1)
 		pygame.display.flip()
-		time.sleep(float(1/60))  # 60 fps
+		time.sleep(float(1/60))  #  60 fps
 
 
 if __name__ == "__main__":
