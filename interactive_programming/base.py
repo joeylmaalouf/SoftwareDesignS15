@@ -26,6 +26,9 @@ class Box(object):
 	def pos(self):
 		return (self.x, self.y)
 
+	def center(self):
+		return (self.x+self.w/2, self.y+self.h/2)
+
 
 class Entity(Box):
 	""" The Entity object, an extension of
@@ -44,3 +47,24 @@ class Entity(Box):
 	def move_by(self, vx, vy):
 		self.x += vx
 		self.y += vy
+
+
+class Level(object):
+	""" The Level object, representing,
+		the current level's state.
+	"""
+
+	def __init__(self, spawn = (100, 100)):
+		self.spawn = spawn
+		self.blocks = []
+		self.enemies = []
+		self.goals = []
+
+	def add_piece(self, w, h, x, y):
+		self.blocks.append(Box((w, h), (x, y)))
+
+	def add_enemy(self, w, h, x, y, vx, vy):
+		self.enemies.append(Entity((w, h), (x, y), (vx, vy)))
+
+	def add_goal(self, w, h, x, y):
+		self.goals.append(Box((w, h), (x, y)))

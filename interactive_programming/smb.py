@@ -1,6 +1,7 @@
-""" Super Meat Boy in Python
+""" Super Meat Boy
+	in Python.
 """
-from base import Box, Entity
+from base import Box, Entity, Level
 import pygame
 import sys
 import time
@@ -19,27 +20,6 @@ class MeatBoy(Entity):
 		self.alive = True
 		self.deaths = 0
 		self.won = False
-
-
-class Level(object):
-	""" The Level object, representing,
-		the current level's state.
-	"""
-
-	def __init__(self, sx, sy):
-		self.spawn = (sx, sy)
-		self.blocks = []
-		self.enemies = []
-		self.goals = []
-
-	def add_piece(self, w, h, x, y):
-		self.blocks.append(Box((w, h), (x, y)))
-
-	def add_enemy(self, w, h, x, y, vx, vy):
-		self.enemies.append(Entity((w, h), (x, y), (vx, vy)))
-
-	def add_goal(self, w, h, x, y):
-		self.goals.append(Box((w, h), (x, y)))
 
 
 class Game(object):
@@ -132,7 +112,7 @@ def main(argv):
 	font = pygame.font.SysFont("monospace", 16)
 	size = (1280, 720)
 	game_object = Game(size, font)
-	level1 = Level(100, 100)
+	level1 = Level()
 	player = MeatBoy(pos = level1.spawn)
 	level1.add_piece(128, 12, 8, 400)
 	level1.add_piece(64, 10, 180, 480)
