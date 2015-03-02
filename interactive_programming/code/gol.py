@@ -102,6 +102,10 @@ class Game(object):
 			for j in range(self.grid_size[1]):
 				if self.grid[i][j]:
 					pygame.draw.rect(self.screen, (0, 0, 0), pygame.Rect((i*10, j*10), (10, 10)))
+		for i in range(1, self.grid_size[0]):
+			pygame.draw.line(self.screen, (240, 240, 240), (i*10, 0), (i*10, self.resolution[1]))
+		for j in range(1, self.grid_size[1]):
+			pygame.draw.line(self.screen, (240, 240, 240), (0, j*10), (self.resolution[0], j*10))
 
 		title_label = self.font.render("Conway's Game of Life in Python", 1, (0, 0, 0))
 		self.screen.blit(title_label, (16, 0))
