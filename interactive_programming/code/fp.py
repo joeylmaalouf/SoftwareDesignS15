@@ -25,10 +25,9 @@ class Game(object):
 		the overall game state.
 	"""
 
-	def __init__(self, resolution, font):
+	def __init__(self, resolution):
 		super(Game, self).__init__()
 		self.resolution = resolution
-		self.font = font
 		self.screen = pygame.display.set_mode(resolution)
 		pygame.display.set_caption("Floating Point")
 
@@ -60,9 +59,8 @@ class Game(object):
 
 def main(argv):
 	pygame.init()
-	font = pygame.font.SysFont("monospace", 16)
 	size = (1280, 720)
-	game_object = Game(size, font)
+	game_object = Game(size)
 	level1 = Level()
 	player = Player(pos = level1.spawn)
 	level1.add_piece(128, 12, 8, 400)

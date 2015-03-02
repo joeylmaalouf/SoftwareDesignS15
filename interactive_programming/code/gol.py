@@ -1,9 +1,11 @@
 """ Game of Life
 	in Python.
 """
+from cPickle import dump, load
+from os.path import exists
 import pygame
-import sys
-import time
+from sys import argv, exit
+from time import sleep
 
 
 class Game(object):
@@ -26,6 +28,23 @@ class Game(object):
 			for j in range(self.grid_size[1]):
 				self.grid[i].append(False)
 
+	def save_state(self, state_num):
+		filepath = "../saves/gol_"+state_num+".sav"
+		fileobj = open(filepath, "wb")
+		dump(self.grid, fileobj)
+		fileobj.close()
+		print("Saved state #"+state_num+"!")
+
+	def load_state(self, state_num):
+		filepath = "../saves/gol_"+state_num[1]+".sav"
+		if exists(filepath):
+			fileobj = open(filepath, "rb")
+			self.grid = load(fileobj)
+			fileobj.close()
+			print("Loaded state #"+state_num[1]+"!")
+		else:
+			print("State #"+state_num[1]+" has not been saved yet!")
+
 	def num_neighbors(self, i, j):
 		num = 0
 		ineg = self.grid_size[0]-1 if i == 0 else i-1
@@ -41,15 +60,22 @@ class Game(object):
 	def update(self):
 		for event in pygame.event.get():
 			if (event.type == pygame.QUIT):
-				sys.exit()
+				exit()
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
-					sys.exit()
+					exit()
 				if event.key == pygame.K_SPACE:
 					self.paused = not self.paused
+				if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5,
+								pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]:
+					self.save_state(pygame.key.name(event.key))
+				if event.key in [pygame.K_F1, pygame.K_F2, pygame.K_F3, pygame.K_F4, pygame.K_F5,
+								pygame.K_F6, pygame.K_F7, pygame.K_F8, pygame.K_F9]:
+					self.load_state(pygame.key.name(event.key))
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				(x, y) = pygame.mouse.get_pos()
 				self.grid[x/10][y/10] = not self.grid[x/10][y/10]
+
 		if not self.paused:
 			self.generation += 1
 			new_grid = []
@@ -76,10 +102,15 @@ class Game(object):
 			for j in range(self.grid_size[1]):
 				if self.grid[i][j]:
 					pygame.draw.rect(self.screen, (0, 0, 0), pygame.Rect((i*10, j*10), (10, 10)))
-		pause_label = self.font.render(("Paused" if self.paused else "Running")+" (press space)", 1, (0, 0, 0))
+
+		title_label = self.font.render("Conway's Game of Life in Python", 1, (0, 0, 0))
+		self.screen.blit(title_label, (16, 0))
+		pause_label = self.font.render("Status: "+("Paused" if self.paused else "Running")+" (Press Space)", 1, (0, 0, 0))
 		self.screen.blit(pause_label, (16, 16))
 		generation_label = self.font.render("Generation "+str(self.generation), 1, (0, 0, 0))
 		self.screen.blit(generation_label, (16, 32))
+		state_label = self.font.render("Press 1-9 to save up to 10 states, press F1-F9 to load them.", 1, (0, 0, 0))
+		self.screen.blit(state_label, (16, 48))
 
 
 def main(argv):
@@ -92,8 +123,8 @@ def main(argv):
 		game_object.update()
 		game_object.draw()
 		pygame.display.flip()
-		time.sleep(float(1/60))  #  60 fps
+		sleep(float(1/60))  #  60 fps
 
 
 if __name__ == "__main__":
-	main(sys.argv)
+	main(argv)
