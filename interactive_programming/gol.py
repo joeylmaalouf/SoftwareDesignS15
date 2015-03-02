@@ -1,7 +1,6 @@
 """ Game of Life
 	in Python.
 """
-from base import Entity, Level
 import pygame
 import sys
 import time
@@ -77,7 +76,7 @@ class Game(object):
 			for j in range(self.grid_size[1]):
 				if self.grid[i][j]:
 					pygame.draw.rect(self.screen, (0, 0, 0), pygame.Rect((i*10, j*10), (10, 10)))
-		pause_label = self.font.render("Paused" if self.paused else "Running", 1, (0, 0, 0))
+		pause_label = self.font.render(("Paused" if self.paused else "Running")+" (press space)", 1, (0, 0, 0))
 		self.screen.blit(pause_label, (16, 16))
 		generation_label = self.font.render("Generation "+str(self.generation), 1, (0, 0, 0))
 		self.screen.blit(generation_label, (16, 32))
