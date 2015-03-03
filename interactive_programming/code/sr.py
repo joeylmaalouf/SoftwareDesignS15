@@ -1,27 +1,11 @@
 """ SkyRoads
 	in Python.
 """
+from base import Camera
 import cv2
 import pygame
 import sys
 import time
-
-
-class Camera(object):
-	""" The Camera object, representing
-		the state of the webcam input.
-	"""
-
-	def __init__(self, device_num):
-		self.cap = cv2.VideoCapture(device_num)
-		self.width = int(self.cap.get(3))
-		self.height = int(self.cap.get(4))
-		self.face_cascade = cv2.CascadeClassifier("/usr/include/opencv2/data/haarcascades/haarcascade_frontalface_alt.xml")
-
-	def get_faces(self):
-		ret, frame = self.cap.read()
-		return self.face_cascade.detectMultiScale(frame, minSize = (20, 20))
-#  http://creat-tabu.blogspot.ro/2013/08/opencv-python-hand-gesture-recognition.html
 
 
 class Game(object):
@@ -39,11 +23,11 @@ class Game(object):
 	def update(self):
 		for event in pygame.event.get():
 			if (event.type == pygame.QUIT) or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-				self.camera.cap.release()
+				self.camera.capture.release()
 				cv2.destroyAllWindows()
 				sys.exit()
 
-		faces = self.camera.get_faces()
+		faces = self.camera.get_face_coords()
 		if len(faces) < 1:
 			self.current_move = "stay"
 		else:

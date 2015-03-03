@@ -1,7 +1,8 @@
 """ Super Meat Boy
 	in Python.
 """
-from base import Entity, Level
+from base import Camera, Entity, Level
+import cv2
 import pygame
 import sys
 import time
@@ -27,12 +28,20 @@ class Game(object):
 		the overall game state.
 	"""
 
-	def __init__(self, resolution, font):
+	def __init__(self, resolution, camera, font):
 		super(Game, self).__init__()
 		self.resolution = resolution
+		self.camera = camera
 		self.font = font
 		self.screen = pygame.display.set_mode(resolution)
 		pygame.display.set_caption("Super Meat Boy")
+
+
+	def close(self):
+		self.camera.capture.release()
+		cv2.destroyAllWindows()
+		sys.exit()
+
 
 	def update(self, player, level):
 		if not player.alive:
@@ -54,10 +63,10 @@ class Game(object):
 
 		for event in pygame.event.get():
 			if (event.type == pygame.QUIT):
-				sys.exit()
+				self.close()
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
-					sys.exit()
+					self.close()
 				if player.grounded and event.key == pygame.K_w:
 					player.vy -= 4
 
@@ -109,9 +118,10 @@ class Game(object):
 
 def main(argv):
 	pygame.init()
-	font = pygame.font.SysFont("monospace", 16)
 	size = (1280, 720)
-	game_object = Game(size, font)
+	camera = Camera(0)
+	font = pygame.font.SysFont("monospace", 16)
+	game_object = Game(size, camera, font)
 	level1 = Level()
 	player = MeatBoy(pos = level1.spawn)
 	level1.add_piece(128, 12, 8, 400)

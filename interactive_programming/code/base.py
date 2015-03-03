@@ -1,5 +1,6 @@
 """ To be imported and used in other files.
 """
+import cv2
 import pygame
 
 
@@ -68,3 +69,22 @@ class Level(object):
 
 	def add_goal(self, w, h, x, y):
 		self.goals.append(Box((w, h), (x, y)))
+
+
+class Camera(object):
+	""" The Camera object, representing
+		the state of the webcam input.
+	"""
+
+	def __init__(self, device_num):
+		self.capture = cv2.VideoCapture(device_num)
+		self.width = int(self.capture.get(3))
+		self.height = int(self.capture.get(4))
+		self.face_cascade = cv2.CascadeClassifier("/usr/include/opencv2/data/haarcascades/haarcascade_frontalface_alt.xml")
+
+	def get_face_coords(self):
+		ret, frame = self.capture.read()
+		return self.face_cascade.detectMultiScale(frame, minSize = (12, 12))
+
+	def get_face(frame, coords, size):
+		return frame[coords[1]:coords[1]+size[1], coords[0]:coords[0]+size[0]]
