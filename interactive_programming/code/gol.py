@@ -2,7 +2,7 @@
 	in Python.
 """
 from cPickle import dump, load
-from os.path import exists
+from os.path import abspath, dirname, exists
 import pygame
 from sys import argv, exit
 from time import sleep
@@ -27,16 +27,17 @@ class Game(object):
 			self.grid.append([])
 			for j in range(self.grid_size[1]):
 				self.grid[i].append(False)
+		self.folderpath = dirname(abspath(__file__))
 
 	def save_state(self, state_num):
-		filepath = "../saves/gol_"+state_num+".sav"
+		filepath = self.folderpath+"/../saves/gol_"+state_num+".sav"
 		fileobj = open(filepath, "wb")
 		dump(self.grid, fileobj)
 		fileobj.close()
 		print("Saved state #"+state_num+"!")
 
 	def load_state(self, state_num):
-		filepath = "../saves/gol_"+state_num[1]+".sav"
+		filepath = self.folderpath+"/../saves/gol_"+state_num[1]+".sav"
 		if exists(filepath):
 			fileobj = open(filepath, "rb")
 			self.grid = load(fileobj)
