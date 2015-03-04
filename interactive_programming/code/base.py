@@ -1,6 +1,7 @@
 """ To be imported and used in other files.
 """
 import cv2
+import numpy as np
 import pygame
 
 
@@ -51,7 +52,7 @@ class Entity(Box):
 
 
 class Level(object):
-	""" The Level object, representing,
+	""" The Level object, representing
 		the current level's state.
 	"""
 
@@ -84,7 +85,12 @@ class Camera(object):
 
 	def get_face_coords(self):
 		ret, frame = self.capture.read()
+		self.most_recent_frame = frame
 		return self.face_cascade.detectMultiScale(frame, minSize = (12, 12))
 
-	def get_face(frame, coords, size):
-		return frame[coords[1]:coords[1]+size[1], coords[0]:coords[0]+size[0]]
+	def get_face(self, frame, xywh):
+		return frame[xywh[1]:xywh[1]+xywh[3], xywh[0]:xywh[0]+xywh[2]]
+
+
+def cv2image_to_pygimage(image):
+	return pygame.image.frombuffer(image.tostring(), image.shape[1::-1], "RGB")

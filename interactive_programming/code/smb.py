@@ -1,8 +1,9 @@
 """ Super Meat Boy
 	in Python.
 """
-from base import Camera, Entity, Level
+from base import Camera, Entity, Level, cv2image_to_pygimage
 import cv2
+from os.path import abspath, dirname
 import pygame
 import sys
 import time
@@ -13,7 +14,7 @@ class MeatBoy(Entity):
 		the player's current state.
 	"""
 
-	def __init__(self, size = (20, 20), pos = (100, 100), speed = (0, 0)):
+	def __init__(self, size = (32, 32), pos = (100, 100), speed = (0, 0)):
 		super(MeatBoy, self).__init__(size, pos)
 		self.vx = speed[0]
 		self.vy = speed[1]
@@ -21,6 +22,19 @@ class MeatBoy(Entity):
 		self.alive = True
 		self.deaths = 0
 		self.won = False
+
+	def set_face(self, camera):
+		faces = []
+		while len(faces) < 1:
+			faces = camera.get_face_coords()
+		face_image = camera.get_face(camera.most_recent_frame, faces[0])
+		converted = cv2image_to_pygimage(face_image)
+		self.face = pygame.transform.scale(converted, self.size())
+		for x in range(self.w):
+			for y in range(self.h):
+				color = self.face.get_at([x, y])
+				color[2] = 255
+				self.face.set_at([x, y], color)
 
 
 class Game(object):
@@ -34,6 +48,7 @@ class Game(object):
 		self.camera = camera
 		self.font = font
 		self.screen = pygame.display.set_mode(resolution)
+		self.folderpath = dirname(abspath(__file__))
 		pygame.display.set_caption("Super Meat Boy")
 
 
@@ -103,7 +118,10 @@ class Game(object):
 			sys.exit()
 		else:
 			self.screen.fill((0, 0, 0))
-			pygame.draw.rect(self.screen, (200, 0, 0), player.rect())
+			try:
+				self.screen.blit(player.face, player.rect())
+			except:
+				pygame.draw.rect(self.screen, (200, 0, 0), player.rect())
 			for block in level.blocks:
 				pygame.draw.rect(self.screen, (128, 128, 128), block.rect())
 			for enemy in level.enemies:
@@ -124,6 +142,7 @@ def main(argv):
 	game_object = Game(size, camera, font)
 	level1 = Level()
 	player = MeatBoy(pos = level1.spawn)
+	player.set_face(game_object.camera)
 	level1.add_piece(128, 12, 8, 400)
 	level1.add_piece(64, 10, 180, 480)
 	level1.add_piece(80, 8, 300, 550)
