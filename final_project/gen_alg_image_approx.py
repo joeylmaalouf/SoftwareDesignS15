@@ -14,34 +14,48 @@ https://www.youtube.com/watch?v=dO05XcXLxGs
 """
 
 
-def random_ellipse(resolution):
-			return [randint(0, resolution[0]-1), randint(0, resolution[1]-1),          #  xcoord, ycoord,
-					randint(1, (resolution[0]-1)/2), randint(1, (resolution[1]-1)/2),  #  xradius, yradius,
-					randint(0, 255)]                                                   #  brightness
+class Ellipse(object):
+	def __init__(self, resolution):
+		self.resolution = resolution
+		for i in range(5):
+			self.randomize(i)
+
+	def randomize(self, attribute_index):
+		if attribute_index == 0:
+			self.xcoord = randint(0, self.resolution[0]-1)
+		elif attribute_index == 1:
+			self.ycoord = randint(0, self.resolution[1]-1)
+		elif attribute_index == 2:
+			self.xradius = randint(1, (self.resolution[0]-1)/2)
+		elif attribute_index == 3:
+			self.yradius = randint(1, (self.resolution[1]-1)/2)
+		elif attribute_index == 4:
+			self.brightness = randint(0, 255)
 
 
 class Individual(object):
 	def __init__(self, resolution):
-		self.numovals = 200
-		self.numchros = self.numovals*5
+		self.n_ellipses = 50
 		self.solution = []
-		for i in range(self.numovals):
-			self.solution.extend(random_ellipse(resolution))
+		for i in range(self.n_ellipses):
+			self.solution.append(Ellipse(resolution))
 		self.fitness = 0
 
 	def make_image(self, resolution):
-		self.image = Image.new("RGB", resolution)
+		self.image = Image.new("L", resolution)
 		draw = ImageDraw.Draw(self.image)
-		for i in range(self.numovals):
-			bounds = (self.solution[5*i]-self.solution[5*i+2], self.solution[5*i+1]-self.solution[5*i+3],
-					  self.solution[5*i]+self.solution[5*i+2], self.solution[5*i+1]+self.solution[5*i+3])
-			draw.ellipse(bounds, fill = self.solution[5*i+4])
+		for i in range(self.n_ellipses):
+			ellipse = self.solution[i]
+			bounds = (ellipse.xcoord-ellipse.xradius, ellipse.ycoord-ellipse.yradius,
+					  ellipse.xcoord+ellipse.xradius, ellipse.ycoord+ellipse.yradius)
+			draw.ellipse(bounds, fill = ellipse.brightness)
 
 	def mutate(self):
-		pass
+		i = randint(0, self.n_ellipses-1)
+		self.solution[i].randomize(randint(0, 4))
 
 	def scramble(self):
-		for i in range(self.numchros):
+		for i in range(self.n_ellipses*5):
 			self.mutate()
 
 	def payoff(self, resolution, goal_access):
@@ -49,21 +63,30 @@ class Individual(object):
 		self_access = self.image.load()
 		for i in range(resolution[0]):
 			for j in range(resolution[1]):
-				diff += abs(self_access[i, j][0]-goal_access[i, j])
-		self.fitness = diff
+				diff += abs(self_access[i, j]-goal_access[i, j])
+		if diff < self.fitness:
+			self.fitness = diff
 
 
 def main(argv):
 	goal_image = Image.open("goal.jpg").convert("L")
 	goal_access = goal_image.load()
 	resolution = goal_image.size
-	popsize = 100
+	popsize = 200
 	population = [Individual(resolution) for i in range(popsize)]
 	generation = 0
-	while(True):
+	while(generation < 10000):
 		for individual in population:
 			individual.make_image(resolution)
 			individual.payoff(resolution, goal_access)
+		population.sort(key = lambda x: x.fitness)
+		population[0].image.save("generations/"+str(generation)+".jpg")
+
+		for individual in population[popsize//4:popsize//2]:
+			individual.mutate()
+		for individual in population[popsize//2:]:
+			individual.scramble()
+		generation += 1
 
 
 if __name__ == "__main__":
