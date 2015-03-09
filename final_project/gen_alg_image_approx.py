@@ -1,17 +1,6 @@
 from PIL import Image, ImageDraw
 from random import randint
 from sys import argv
-""" approximate images using genalg to optimize ovals
-https://www.youtube.com/watch?v=rGt3iMAJVT8
-https://www.youtube.com/watch?v=dO05XcXLxGs
--python imaging library (PIL)?
--evaluate how close each pixel value is in the two images, the one we're trying to mimic and our representation
--make gif of best image each generation?
--maybe use hill climbing? only actually mutate an individual if the new fitness is an improvement;
-	this could mean that I could attempt mutation on every individual
-	(which is rather greedy, so I should still scramble a few for the sake of eventually getting
-	out of local maxima, rather than global, but is that even an issue with image approximation?)
-"""
 
 
 class Ellipse(object):
@@ -35,7 +24,7 @@ class Ellipse(object):
 
 class Individual(object):
 	def __init__(self, resolution):
-		self.n_ellipses = 50
+		self.n_ellipses = 20
 		self.solution = []
 		for i in range(self.n_ellipses):
 			self.solution.append(Ellipse(resolution))
@@ -64,24 +53,22 @@ class Individual(object):
 		for i in range(resolution[0]):
 			for j in range(resolution[1]):
 				diff += abs(self_access[i, j]-goal_access[i, j])
-		if diff < self.fitness:
-			self.fitness = diff
+		self.fitness = diff**2
 
 
 def main(argv):
 	goal_image = Image.open("goal.jpg").convert("L")
 	goal_access = goal_image.load()
 	resolution = goal_image.size
-	popsize = 200
+	popsize = 500
 	population = [Individual(resolution) for i in range(popsize)]
 	generation = 0
-	while(generation < 10000):
+	while(generation < 1000):
 		for individual in population:
 			individual.make_image(resolution)
 			individual.payoff(resolution, goal_access)
 		population.sort(key = lambda x: x.fitness)
-		population[0].image.save("generations/"+str(generation)+".jpg")
-
+		population[0].image.save("generations/"+str(generation)+"-"+str(population[0].fitness)+".jpg")
 		for individual in population[popsize//4:popsize//2]:
 			individual.mutate()
 		for individual in population[popsize//2:]:
