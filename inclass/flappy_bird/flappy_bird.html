@@ -1,0 +1,233 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module flappy_bird</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>flappy_bird</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/parallels/SoftDesSp15/inclass/flappy_bird/flappy_bird.py">/home/parallels/SoftDesSp15/inclass/flappy_bird/flappy_bird.py</a></font></td></tr></table>
+    <p><tt>A&nbsp;Flappy&nbsp;<a href="#Bird">Bird</a>&nbsp;Clone&nbsp;Starring&nbsp;the&nbsp;Olin&nbsp;O</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="pygame.html">pygame</a><br>
+</td><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="flappy_bird.html#Bird">Bird</a>
+</font></dt><dt><font face="helvetica, arial"><a href="flappy_bird.html#DrawableSurface">DrawableSurface</a>
+</font></dt><dt><font face="helvetica, arial"><a href="flappy_bird.html#FlappyModel">FlappyModel</a>
+</font></dt><dt><font face="helvetica, arial"><a href="flappy_bird.html#FlappyView">FlappyView</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="flappy_bird.html#Background">Background</a>
+</font></dt><dt><font face="helvetica, arial"><a href="flappy_bird.html#FlappyBird">FlappyBird</a>
+</font></dt><dt><font face="helvetica, arial"><a href="flappy_bird.html#PipeObstacle">PipeObstacle</a>
+</font></dt><dt><font face="helvetica, arial"><a href="flappy_bird.html#PygameKeyboardController">PygameKeyboardController</a>
+</font></dt></dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Background">class <strong>Background</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;the&nbsp;contents&nbsp;of&nbsp;the&nbsp;background<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Background-__init__"><strong>__init__</strong></a>(self, screen_width, screen_height)</dt><dd><tt>initialize&nbsp;the&nbsp;background&nbsp;for&nbsp;Flappy&nbsp;<a href="#Bird">Bird</a>.&nbsp;&nbsp;The&nbsp;variables<br>
+screen_width&nbsp;and&nbsp;screen_height&nbsp;are&nbsp;the&nbsp;size&nbsp;of&nbsp;the<br>
+screen&nbsp;in&nbsp;pixels</tt></dd></dl>
+
+<dl><dt><a name="Background-collided_with"><strong>collided_with</strong></a>(self, entity_rect)</dt><dd><tt>Returns&nbsp;True&nbsp;if&nbsp;and&nbsp;only&nbsp;if&nbsp;the&nbsp;input&nbsp;rectangle&nbsp;entity_rect<br>
+has&nbsp;collided&nbsp;with&nbsp;the&nbsp;ground&nbsp;and&nbsp;false&nbsp;otherwise</tt></dd></dl>
+
+<dl><dt><a name="Background-get_drawables"><strong>get_drawables</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;drawables&nbsp;for&nbsp;the&nbsp;background</tt></dd></dl>
+
+<dl><dt><a name="Background-get_ground_drawables"><strong>get_ground_drawables</strong></a>(self)</dt><dd><tt>Get&nbsp;just&nbsp;the&nbsp;drawables&nbsp;that&nbsp;are&nbsp;part&nbsp;of&nbsp;the&nbsp;ground.&nbsp;&nbsp;These<br>
+have&nbsp;been&nbsp;separated&nbsp;out&nbsp;since&nbsp;death&nbsp;will&nbsp;only&nbsp;occur&nbsp;if&nbsp;there<br>
+is&nbsp;a&nbsp;collision&nbsp;with&nbsp;the&nbsp;ground&nbsp;(rather&nbsp;than&nbsp;the&nbsp;stars&nbsp;for&nbsp;instance</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Bird">class <strong>Bird</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;the&nbsp;player&nbsp;in&nbsp;the&nbsp;game&nbsp;(the&nbsp;Flappy&nbsp;<a href="#Bird">Bird</a>)<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Bird-__init__"><strong>__init__</strong></a>(self, pos_x, pos_y)</dt><dd><tt>Initialize&nbsp;a&nbsp;Flappy&nbsp;bird&nbsp;at&nbsp;position&nbsp;(pos_x,&nbsp;pos_y)</tt></dd></dl>
+
+<dl><dt><a name="Bird-flap"><strong>flap</strong></a>(self)</dt><dd><tt>cause&nbsp;the&nbsp;bird&nbsp;to&nbsp;accelerate&nbsp;upwards&nbsp;(negative&nbsp;y&nbsp;direction)</tt></dd></dl>
+
+<dl><dt><a name="Bird-get_bounding_rect"><strong>get_bounding_rect</strong></a>(self)</dt><dd><tt>Returns&nbsp;a&nbsp;rectangle&nbsp;that&nbsp;encompasses&nbsp;the&nbsp;player&nbsp;(Flappy&nbsp;<a href="#Bird">Bird</a>).&nbsp;&nbsp;This<br>
+rectangle&nbsp;is&nbsp;used&nbsp;primarily&nbsp;to&nbsp;detect&nbsp;when&nbsp;the&nbsp;player&nbsp;has&nbsp;died.</tt></dd></dl>
+
+<dl><dt><a name="Bird-get_drawables"><strong>get_drawables</strong></a>(self)</dt><dd><tt>Fet&nbsp;the&nbsp;drawables&nbsp;that&nbsp;makeup&nbsp;the&nbsp;<a href="#FlappyBird">FlappyBird</a>&nbsp;Player.&nbsp;&nbsp;Currently&nbsp;there<br>
+is&nbsp;just&nbsp;one&nbsp;(the&nbsp;image&nbsp;of&nbsp;the&nbsp;Olin&nbsp;O)</tt></dd></dl>
+
+<dl><dt><a name="Bird-update"><strong>update</strong></a>(self, delta_t)</dt><dd><tt>update&nbsp;the&nbsp;flappy&nbsp;bird's&nbsp;position</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="DrawableSurface">class <strong>DrawableSurface</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;class&nbsp;that&nbsp;wraps&nbsp;a&nbsp;pygame.Surface&nbsp;and&nbsp;a&nbsp;pygame.Rect<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="DrawableSurface-__init__"><strong>__init__</strong></a>(self, surface, rect)</dt><dd><tt>Initialize&nbsp;the&nbsp;drawable&nbsp;surface</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FlappyBird">class <strong>FlappyBird</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;main&nbsp;Flappy&nbsp;<a href="#Bird">Bird</a>&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="FlappyBird-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Initialize&nbsp;the&nbsp;flappy&nbsp;bird&nbsp;game.&nbsp;&nbsp;Use&nbsp;<a href="#FlappyBird">FlappyBird</a>.run&nbsp;to<br>
+start&nbsp;the&nbsp;game</tt></dd></dl>
+
+<dl><dt><a name="FlappyBird-run"><strong>run</strong></a>(self)</dt><dd><tt>the&nbsp;main&nbsp;runloop...&nbsp;loop&nbsp;until&nbsp;death</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FlappyModel">class <strong>FlappyModel</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;the&nbsp;game&nbsp;state&nbsp;of&nbsp;our&nbsp;Flappy&nbsp;bird&nbsp;clone.<br>
+&nbsp;<br>
+The&nbsp;tracks&nbsp;the&nbsp;background&nbsp;(which&nbsp;consists&nbsp;of&nbsp;the&nbsp;ground&nbsp;as&nbsp;well&nbsp;as<br>
+the&nbsp;stars),&nbsp;the&nbsp;location&nbsp;of&nbsp;the&nbsp;<a href="#Bird">Bird</a>&nbsp;(the&nbsp;Olin&nbsp;"O"),&nbsp;and&nbsp;the&nbsp;pipe<br>
+obstacles.<br>
+&nbsp;<br>
+All&nbsp;of&nbsp;the&nbsp;items&nbsp;in&nbsp;the&nbsp;model&nbsp;implement&nbsp;a&nbsp;get_drawables&nbsp;function&nbsp;that<br>
+returns&nbsp;a&nbsp;list&nbsp;of&nbsp;<a href="#DrawableSurface">DrawableSurface</a>&nbsp;objects.&nbsp;&nbsp;Each&nbsp;<a href="#DrawableSurface">DrawableSurface</a>&nbsp;contains<br>
+a&nbsp;surface&nbsp;(which&nbsp;defines&nbsp;the&nbsp;appearance&nbsp;of&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>)&nbsp;and&nbsp;a&nbsp;rect&nbsp;which<br>
+defines&nbsp;where&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;should&nbsp;be&nbsp;drawn.&nbsp;&nbsp;The&nbsp;coordinates&nbsp;of&nbsp;the&nbsp;rects<br>
+are&nbsp;defined&nbsp;with&nbsp;respect&nbsp;to&nbsp;a&nbsp;coordinate&nbsp;system&nbsp;with&nbsp;the&nbsp;origin&nbsp;placed<br>
+in&nbsp;the&nbsp;upper&nbsp;lefthand&nbsp;corner&nbsp;of&nbsp;the&nbsp;very&nbsp;beginning&nbsp;of&nbsp;the&nbsp;<a href="#FlappyBird">FlappyBird</a><br>
+level.&nbsp;&nbsp;It&nbsp;is&nbsp;the&nbsp;responsibility&nbsp;of&nbsp;the&nbsp;view&nbsp;to&nbsp;draw&nbsp;the&nbsp;rects&nbsp;at&nbsp;the<br>
+appropriate&nbsp;location&nbsp;on&nbsp;the&nbsp;screen&nbsp;(which&nbsp;only&nbsp;encompasses&nbsp;a&nbsp;small<br>
+fraction&nbsp;of&nbsp;the&nbsp;level.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="FlappyModel-__init__"><strong>__init__</strong></a>(self, width, height)</dt><dd><tt>Initialize&nbsp;the&nbsp;flappy&nbsp;model.</tt></dd></dl>
+
+<dl><dt><a name="FlappyModel-get_drawables"><strong>get_drawables</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;DrawableSurfaces&nbsp;for&nbsp;the&nbsp;model.</tt></dd></dl>
+
+<dl><dt><a name="FlappyModel-is_dead"><strong>is_dead</strong></a>(self)</dt><dd><tt>Return&nbsp;True&nbsp;if&nbsp;the&nbsp;player&nbsp;is&nbsp;dead&nbsp;(for&nbsp;instance)&nbsp;the&nbsp;player<br>
+has&nbsp;collided&nbsp;with&nbsp;an&nbsp;obstacle,&nbsp;and&nbsp;false&nbsp;otherwise</tt></dd></dl>
+
+<dl><dt><a name="FlappyModel-update"><strong>update</strong></a>(self, delta_t)</dt><dd><tt>Updates&nbsp;the&nbsp;model&nbsp;and&nbsp;its&nbsp;constituent&nbsp;parts</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FlappyView">class <strong>FlappyView</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;view&nbsp;of&nbsp;the&nbsp;Flappy&nbsp;<a href="#Bird">Bird</a>&nbsp;game.&nbsp;&nbsp;This&nbsp;renders&nbsp;the&nbsp;Flappy&nbsp;<a href="#Bird">Bird</a>&nbsp;game<br>
+state&nbsp;in&nbsp;a&nbsp;Pygame&nbsp;window<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="FlappyView-__init__"><strong>__init__</strong></a>(self, model, width, height)</dt><dd><tt>Initialize&nbsp;the&nbsp;view&nbsp;for&nbsp;Flappy&nbsp;<a href="#Bird">Bird</a>.&nbsp;&nbsp;The&nbsp;input&nbsp;model<br>
+is&nbsp;necessary&nbsp;to&nbsp;find&nbsp;the&nbsp;position&nbsp;of&nbsp;relevant&nbsp;objects&nbsp;to&nbsp;draw.</tt></dd></dl>
+
+<dl><dt><a name="FlappyView-draw"><strong>draw</strong></a>(self)</dt><dd><tt>Redraw&nbsp;the&nbsp;full&nbsp;game&nbsp;window</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PipeObstacle">class <strong>PipeObstacle</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;class&nbsp;that&nbsp;represents&nbsp;a&nbsp;double&nbsp;pipe&nbsp;obstacle<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PipeObstacle-__init__"><strong>__init__</strong></a>(self, pos_x, screen_height)</dt><dd><tt>Initialize&nbsp;a&nbsp;pip&nbsp;obstacle&nbsp;at&nbsp;the&nbsp;specified&nbsp;x&nbsp;coordinate&nbsp;pos_x</tt></dd></dl>
+
+<dl><dt><a name="PipeObstacle-collided_with"><strong>collided_with</strong></a>(self, entity_rect)</dt><dd><tt>Returns&nbsp;true&nbsp;if&nbsp;and&nbsp;only&nbsp;if&nbsp;the&nbsp;input&nbsp;rectangle&nbsp;entity_rect<br>
+has&nbsp;collided&nbsp;with&nbsp;the&nbsp;obstacle</tt></dd></dl>
+
+<dl><dt><a name="PipeObstacle-get_drawables"><strong>get_drawables</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;drawables&nbsp;that&nbsp;constitute&nbsp;a&nbsp;pipe&nbsp;obstacle</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PygameKeyboardController">class <strong>PygameKeyboardController</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Controls&nbsp;flappy&nbsp;bird&nbsp;by&nbsp;mapping&nbsp;spacebar&nbsp;to&nbsp;upward&nbsp;acceleration<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PygameKeyboardController-__init__"><strong>__init__</strong></a>(self, model)</dt><dd><tt>initialize&nbsp;the&nbsp;keyboard&nbsp;controller.&nbsp;&nbsp;The&nbsp;specified&nbsp;model<br>
+will&nbsp;be&nbsp;manipulated&nbsp;in&nbsp;response&nbsp;to&nbsp;user&nbsp;key&nbsp;presses</tt></dd></dl>
+
+<dl><dt><a name="PygameKeyboardController-process_events"><strong>process_events</strong></a>(self)</dt><dd><tt>process&nbsp;keyboard&nbsp;events.&nbsp;&nbsp;This&nbsp;must&nbsp;be&nbsp;called&nbsp;periodically<br>
+in&nbsp;order&nbsp;for&nbsp;the&nbsp;controller&nbsp;to&nbsp;have&nbsp;any&nbsp;effect&nbsp;on&nbsp;the&nbsp;game</tt></dd></dl>
+
+</td></tr></table></td></tr></table>
+</body></html>
