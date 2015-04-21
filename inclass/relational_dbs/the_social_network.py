@@ -1,7 +1,7 @@
 """ Experimenting (again) with Social Networks.  Gonna strike it rich! """
-
 import sys
 import pickle
+
 
 class SocialNetworkModel(object):
     """ Represents all of the data in our social networking App """
@@ -35,6 +35,7 @@ class SocialNetworkModel(object):
                 return u
         return None
 
+
 class User(object):
     """ Represents a user in our social network """
     def __init__(self,
@@ -64,6 +65,7 @@ class User(object):
             return_val += "\n  %s %s" %(f.first_name, f.last_name)
         return return_val
 
+
 class Post(object):
     """ Represents a post that a user has made on our network """
     def __init__(self, text):
@@ -73,6 +75,7 @@ class Post(object):
     def __str__(self):
         """ Return a Post as a string containing the post text """
         return self.text
+
 
 class SocialNetworkTextView(object):
     """ A text-based view for our network """
@@ -85,6 +88,7 @@ class SocialNetworkTextView(object):
         for i,u in enumerate(self.model.users):
             print "User %i: %s" % (i, u)
 
+
 def load_model(pickle_filename):
     """ Load a model from the file 'pickle_filename' """
     pickle_file = open(pickle_filename)
@@ -92,13 +96,15 @@ def load_model(pickle_filename):
     pickle_file.close()
     return model
 
+
 def save_model(pickle_filename, model):
     """ Save the model to the file 'pickle_filename' """
     pickle_file = open(pickle_filename, 'wt')
     pickle.dump(model, pickle_file)
     pickle_file.close()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     pickle_filename = None
     overwrite_pickle = False
 

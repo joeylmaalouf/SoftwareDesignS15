@@ -12,7 +12,7 @@ class SocialNetworkModel(object):
             If a user with the same first and last name already exists
             an error message is printed and the user is not added. """
         if self.lookup_user(user.first_name, user.last_name) != None:
-            print "Tried to add duplicate user"
+            print("Tried to add duplicate user")
             return
         self.users.append(user)
 
@@ -85,7 +85,7 @@ class SocialNetworkTextView(object):
     def render(self):
         """ Render the view to the terminal """
         for i,u in enumerate(self.model.users):
-            print "User %i: %s" % (i, u)
+            print("User %i: %s" % (i, u))
 
 
 if __name__ == "__main__":

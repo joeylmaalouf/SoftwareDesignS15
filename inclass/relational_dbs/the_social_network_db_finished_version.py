@@ -1,9 +1,9 @@
 """ Experimenting again with Social Networks """
-
 import sys
 import pickle
 from os.path import isfile
 import MySQLdb as mdb
+
 
 class SocialNetworkModel(object):
     """ Represents all of the data in our social networking App """
@@ -66,6 +66,7 @@ class SocialNetworkModel(object):
                 return u
         return None
 
+
 class User(object):
     """ Represents a user in our social network """
     def __init__(self,
@@ -98,6 +99,7 @@ class User(object):
             return_val += "\n  %s %s" %(f.first_name, f.last_name)
         return return_val
 
+
 class Post(object):
     """ Represents a post that a user has made on our network """
     def __init__(self, text):
@@ -119,6 +121,7 @@ class SocialNetworkTextView(object):
         for i,u in enumerate(self.model.users):
             print "User %i: %s" % (i, u)
 
+
 def reset_db(con):
     with con:
         cur = con.cursor()
@@ -136,6 +139,7 @@ def reset_db(con):
         cur.execute("CREATE TABLE Posts(Id INT PRIMARY KEY AUTO_INCREMENT, \
                                         User INT, \
                                         Text VARCHAR(255))")
+
 
 def load_model(con):
     """ Load a model from the connected database """
@@ -167,13 +171,15 @@ def load_model(con):
 
     return model
 
+
 def save_model(pickle_filename, model):
     """ Save the model to the file 'pickle_filename' """
     pickle_file = open(pickle_filename, 'wt')
     pickle.dump(model, pickle_file)
     pickle_file.close()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     db_name = None
     overwrite_db = False
 
